@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#0f172a">
+  <title>🎬 PolosurTV - Centro Multimedia</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <!-- hls.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Roboto, system-ui;
+      background: #0f172a;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      border-bottom: 3px solid #f59e0b;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; }
+    .logo-icon { font-size: 1.8rem; color: #f59e0b; }
+    .logo-text h1 { font-size: 1.3rem; font-weight: 800; }
+    .logo-text p { font-size: 0.65rem; color: #94a3b8; }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #1e293b;
+      padding: 4px 12px;
+      border-radius: 40px;
+    }
+    .user-email { font-size: 0.7rem; color: #94a3b8; }
+    .admin-badge {
+      background: #f59e0b;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      font-weight: bold;
+    }
+    .sync-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.65rem;
+    }
+    .sync-status.online { color: #22c55e; }
+    .sync-status.offline { color: #ef4444; }
+    .auth-buttons { display: flex; gap: 8px; }
+    .btn-login, .btn-register {
+      background: #f59e0b;
+      border: none;
+      color: #0f172a;
+      padding: 5px 15px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.75rem;
+      transition: 0.2s;
+    }
+    .btn-login:hover, .btn-register:hover {
+      background: #d97706;
+      transform: scale(1.02);
+    }
+    .btn-logout {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+
+    /* Botón sidebar */
+    .sidebar-toggle-btn {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #f59e0b;
+      color: #0f172a;
+      width: 40px;
+      height: 80px;
+      border-radius: 0 20px 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1001;
+      writing-mode: vertical-rl;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+    .floating-icons {
+      position: fixed;
+      right: 15px;
+      bottom: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .floating-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: white;
+    }
+    .floating-icon.telegram { background: #0088cc; }
+    .floating-icon.web { background: #f59e0b; }
+    .floating-icon i { font-size: 22px; }
+
+    /* BANNER SUPERIOR (Nativo) */
+    .top-banner {
+      text-align: center;
+      padding: 0.5rem;
+      background: #1e293b;
+      margin: 0.5rem 1rem;
+      border-radius: 16px;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .top-banner iframe, .top-banner ins {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -350px;
+      width: 350px;
+      height: 100vh;
+      background: #0f172a;
+      border-right: 2px solid #334155;
+      z-index: 1002;
+      transition: left 0.4s;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .sidebar.open { left: 0; }
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid #334155;
+    }
+    .close-sidebar {
+      background: #ef4444;
+      border: none;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .sidebar label { display: block; margin-top: 10px; font-weight: 600; font-size: 0.75rem; }
+    .sidebar input, .sidebar select, .sidebar textarea {
+      width: 100%;
+      padding: 6px 10px;
+      border-radius: 16px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: white;
+      margin-top: 4px;
+      font-size: 0.8rem;
+    }
+    .sidebar textarea { font-size: 0.65rem; resize: vertical; }
+    .sidebar button {
+      background: #f59e0b;
+      width: 100%;
+      padding: 8px;
+      border-radius: 40px;
+      font-weight: bold;
+      margin-top: 15px;
+      cursor: pointer;
+      border: none;
+    }
+    .tmdb-search {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 10px;
+      margin: 12px 0;
+    }
+    .tmdb-results {
+      max-height: 150px;
+      overflow-y: auto;
+      background: #0f172a;
+      border-radius: 12px;
+      margin-top: 6px;
+    }
+    .tmdb-item { padding: 6px; border-bottom: 1px solid #334155; cursor: pointer; font-size: 0.75rem; }
+    .tmdb-item:hover { background: #334155; }
+
+    /* Reproductor de prueba */
+    .preview-panel {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 0.8rem;
+      margin: 0.8rem 0;
+    }
+    .test-url-input { display: flex; gap: 6px; margin: 8px 0; }
+    .test-url-input input { flex: 1; padding: 6px; font-size: 0.7rem; }
+    .player-container {
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      margin-top: 8px;
+    }
+    video, iframe { width: 100%; height: 100%; border: none; }
+    .status-msg { font-size: 0.6rem; margin-top: 6px; color: #94a3b8; }
+
+    /* Pestañas */
+    .tabs-container {
+      background: #1e293b;
+      border-radius: 20px;
+      margin: 0.5rem 1rem 1rem 1rem;
+      overflow: hidden;
+    }
+    .tabs-header {
+      display: flex;
+      flex-wrap: wrap;
+      background: #0f172a;
+      border-bottom: 2px solid #334155;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .tab-btn i { font-size: 1.1rem; }
+    .tab-btn:hover { background: #1e293b; color: #f59e0b; }
+    .tab-btn.active { color: #f59e0b; border-bottom: 3px solid #f59e0b; background: #1e293b; }
+    .tab-content { padding: 1rem; min-height: 400px; }
+    .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+    .tab-pane.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tarjetas */
+    .grid-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: flex-start;
+    }
+    .card {
+      background: #0f172a;
+      border-radius: 16px;
+      width: calc(20% - 0.8rem);
+      min-width: 150px;
+      overflow: hidden;
+      border: 1px solid #334155;
+      transition: 0.2s;
+      position: relative;
+    }
+    .card:hover { transform: translateY(-3px); border-color: #f59e0b; }
+    .card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .card-body { padding: 8px; }
+    .card-title { font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-source {
+      font-size: 0.6rem;
+      background: #334155;
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin: 4px 0;
+    }
+    .btn-preview {
+      background: #2563eb;
+      border: none;
+      color: white;
+      border-radius: 40px;
+      padding: 5px;
+      width: 100%;
+      margin-bottom: 4px;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+    .copy-btn-card, .delete-btn, .report-btn {
+      border: none;
+      border-radius: 40px;
+      padding: 5px;
+      width: 100%;
+      margin-top: 4px;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+    .copy-btn-card { background: #475569; color: white; }
+    .delete-btn { background: #dc2626; color: white; }
+    .delete-btn:disabled { background: #7f8c8d; cursor: not-allowed; opacity: 0.6; }
+    .report-btn { background: #f59e0b; color: #0f172a; }
+    .report-btn:hover { background: #d97706; }
+    .empty-message {
+      text-align: center;
+      padding: 40px;
+      color: #94a3b8;
+      background: #0f172a;
+      border-radius: 20px;
+    }
+
+    /* Modal de espera para copiar */
+    .waiting-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      backdrop-filter: blur(10px);
+    }
+    .waiting-modal-content {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border-radius: 28px;
+      padding: 2rem;
+      max-width: 90%;
+      width: 480px;
+      text-align: center;
+      border: 2px solid #f59e0b;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      animation: fadeInUp 0.4s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .waiting-modal-header { margin-bottom: 1rem; }
+    .waiting-modal-header h2 { color: #f59e0b; font-size: 1.5rem; }
+    .waiting-timer {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #f59e0b;
+      margin: 1rem 0;
+      font-family: monospace;
+    }
+    .waiting-progress {
+      width: 100%;
+      height: 8px;
+      background: #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    .waiting-progress-bar {
+      height: 100%;
+      background: #f59e0b;
+      width: 0%;
+      transition: width 0.3s linear;
+    }
+    .waiting-message { color: #94a3b8; margin-bottom: 1rem; }
+    .copy-unlock-btn {
+      background: #475569;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: not-allowed;
+      width: 100%;
+      opacity: 0.5;
+      transition: 0.2s;
+    }
+    .copy-unlock-btn.active {
+      opacity: 1;
+      background: #22c55e;
+      cursor: pointer;
+    }
+    .copy-unlock-btn.active:hover { background: #16a34a; transform: scale(1.02); }
+    .close-waiting-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ef4444;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .close-waiting-btn.active { opacity: 1; cursor: pointer; }
+    .close-waiting-btn.active:hover { background: #dc2626; transform: scale(1.05); }
+    .ad-opened-badge {
+      background: #22c55e20;
+      color: #22c55e;
+      padding: 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    /* BANNER INFERIOR (468x60) */
+    .bottom-banner {
+      text-align: center;
+      padding: 0.5rem;
+      background: #1e293b;
+      margin: 0.5rem 1rem;
+      border-radius: 16px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bottom-banner iframe, .bottom-banner ins {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Panel de reportes */
+    .reports-panel {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .report-item {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+      border-left: 3px solid #f59e0b;
+    }
+    .report-title { font-weight: bold; color: #f59e0b; }
+    .report-reason { font-size: 0.8rem; margin: 5px 0; color: #94a3b8; }
+    .report-meta {
+      font-size: 0.65rem;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .resolve-report-btn {
+      background: #22c55e;
+      border: none;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.65rem;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f59e0b;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .footer {
+      background: #0f172a;
+      border-top: 2px solid #334155;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .footer p { font-size: 0.7rem; }
+    .footer-social { display: flex; justify-content: center; gap: 15px; margin-top: 0.5rem; }
+    .footer-social a { color: #64748b; font-size: 1.2rem; transition: 0.3s; }
+    .footer-social a:hover { color: #f59e0b; }
+
+    .admin-tab { display: none; }
+    .admin-tab.visible { display: flex; }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; left: -100%; }
+      .tab-btn { padding: 8px 12px; font-size: 0.7rem; min-width: 70px; }
+      .card { width: calc(33.333% - 0.6rem); min-width: 100px; }
+      .card-img { height: 140px; }
+      .card-title { font-size: 0.7rem; white-space: normal; }
+      .waiting-modal-content { padding: 1rem; width: 95%; }
+      .waiting-timer { font-size: 3rem; }
+    }
+    @media (max-width: 480px) {
+      .card { min-width: 90px; }
+      .card-img { height: 120px; }
+      .tab-btn { padding: 6px 8px; font-size: 0.6rem; min-width: 55px; }
+    }
+    @media (min-width: 1200px) {
+      .card { width: calc(16.666% - 0.8rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BANNER SUPERIOR (Nativo) -->
+<div class="top-banner" id="topBanner">
+  <div style="text-align:center; color:#94a3b8;">
+    <i class="fas fa-spinner fa-pulse"></i> Cargando banner nativo...
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+  <div class="loading-spinner"></div>
+  <p style="font-size: 0.8rem;">Sincronizando...</p>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon"><i class="fas fa-tv"></i></div>
+    <div class="logo-text">
+      <h1>PolosurTV</h1>
+      <p>🎬 Tu centro multimedia</p>
+    </div>
+  </div>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <div class="sync-status" id="syncStatus">
+      <i class="fas fa-cloud-upload-alt"></i> <span id="syncText">Conectando...</span>
+    </div>
+    <div class="user-info" id="userInfo" style="display: none;">
+      <i class="fas fa-user-circle"></i>
+      <span class="user-email" id="userEmail"></span>
+      <span class="admin-badge" id="adminBadge" style="display: none;">Admin</span>
+      <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+    <div class="auth-buttons" id="authButtons">
+      <button class="btn-login" id="loginBtn">Login</button>
+      <button class="btn-register" id="registerBtn">Registro</button>
+    </div>
+  </div>
+</header>
+
+<!-- Iconos flotantes -->
+<div class="floating-icons">
+  <a href="#" target="_blank" class="floating-icon telegram" id="telegramLink"><i class="fab fa-telegram-plane"></i></a>
+  <a href="#" target="_blank" class="floating-icon web" id="webLink"><i class="fas fa-globe"></i></a>
+</div>
+
+<!-- Botón sidebar -->
+<div class="sidebar-toggle-btn" id="sidebarToggleBtn" style="display: none;">
+  <i class="fas fa-chevron-right"></i> AGREGAR
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2><i class="fas fa-plus-circle"></i> Agregar</h2>
+    <button class="close-sidebar" id="closeSidebarBtn"><i class="fas fa-times"></i></button>
+  </div>
+  
+  <label>Título *</label>
+  <input type="text" id="inputTitle" placeholder="Ej: Avatar 2">
+  
+  <label>Imagen URL</label>
+  <input type="text" id="inputImg" placeholder="https://...jpg">
+  
+  <label>Tipo</label>
+  <select id="inputType">
+    <option value="drive">📁 Google Drive</option>
+    <option value="mp4">🎬 MP4 directo</option>
+    <option value="m3u8">📡 M3U8 / HLS</option>
+    <option value="live">📺 Canal en Vivo</option>
+  </select>
+  
+  <label>Enlace *</label>
+  <input type="text" id="inputUrl" placeholder="URL del recurso">
+  
+  <!-- Sección de monetización (SOLO ADMIN) -->
+  <div id="monetizationSection" style="display: none;">
+    <div style="background: #f59e0b20; border-radius: 16px; padding: 0.8rem; margin: 0.8rem 0; border: 1px solid #f59e0b;">
+      <label style="color: #f59e0b;"><i class="fas fa-coins"></i> Monetización</label>
+      
+      <label>📢 Banner Nativo (script)</label>
+      <textarea id="nativeBannerCode" rows="4" placeholder='<script async="async" data-cfasync="false" src="https://pl29351656.profitablecpmratenetwork.com/5393eb9da8b6156ab1ad5d0a7ce99eb6/invoke.js"></script>\n<div id="container-5393eb9da8b6156ab1ad5d0a7ce99eb6"></div>'></textarea>
+      
+      <label>📢 Banner 468x60 (script)</label>
+      <textarea id="banner468Code" rows="5" placeholder="<script> atOptions = {...}; </script><script src='...'></script>"></textarea>
+      
+      <label>📢 URL Anuncio Emergente (para abrir en nueva pestaña)</label>
+      <input type="text" id="popupAdUrl" placeholder="https://ejemplo.com/anuncio">
+      
+      <label>⏱️ Duración (segundos)</label>
+      <input type="number" id="adDuration" value="15" min="5" max="60">
+      
+      <button id="btnSaveAdConfig" style="background: #22c55e;"><i class="fas fa-save"></i> Guardar</button>
+    </div>
+  </div>
+
+  <div class="preview-panel">
+    <div class="test-url-input">
+      <input type="text" id="testUrl" placeholder="Probar enlace">
+      <button id="btnTestUrl" style="width: auto; padding: 0 12px;">Test</button>
+    </div>
+    <div class="player-container">
+      <video id="testVideo" controls style="display:none;"></video>
+      <iframe id="testIframe" style="display:none;" allowfullscreen></iframe>
+    </div>
+    <div class="status-msg" id="testStatus">🔗 Prueba antes de guardar</div>
+  </div>
+
+  <div class="tmdb-search">
+    <label><i class="fab fa-imdb"></i> Buscar en TMDb</label>
+    <input type="text" id="tmdbQuery" placeholder="Película/serie...">
+    <div id="tmdbResults" class="tmdb-results" style="display:none;"></div>
+  </div>
+  
+  <button id="btnAddItem"><i class="fas fa-save"></i> Guardar</button>
+  <p style="font-size: 10px; margin-top: 10px; text-align: center;">📌 Datos guardados en la nube</p>
+</div>
+
+<!-- Contenido principal con PESTAÑAS HORIZONTALES -->
+<div class="tabs-container">
+  <div class="tabs-header" id="tabsHeader">
+    <button class="tab-btn active" data-tab="drive">
+      <i class="fab fa-google-drive"></i> Google Drive
+    </button>
+    <button class="tab-btn" data-tab="mp4">
+      <i class="fas fa-video"></i> MP4
+    </button>
+    <button class="tab-btn" data-tab="m3u8">
+      <i class="fas fa-stream"></i> M3U8
+    </button>
+    <button class="tab-btn" data-tab="live">
+      <i class="fas fa-satellite-dish"></i> Canales LIVE
+    </button>
+    <button class="tab-btn admin-tab" data-tab="reports" id="reportsTabBtn" style="display: none;">
+      <i class="fas fa-flag"></i> Reportes
+    </button>
+    <button class="tab-btn admin-tab" data-tab="ads" id="adsTabBtn" style="display: none;">
+      <i class="fas fa-ad"></i> Anuncios
+    </button>
+  </div>
+  
+  <div class="tab-content">
+    <!-- Pestaña Google Drive -->
+    <div class="tab-pane active" id="tab-drive">
+      <div class="grid-cards" id="driveContainer"></div>
+    </div>
+    
+    <!-- Pestaña MP4 -->
+    <div class="tab-pane" id="tab-mp4">
+      <div class="grid-cards" id="mp4Container"></div>
+    </div>
+    
+    <!-- Pestaña M3U8 -->
+    <div class="tab-pane" id="tab-m3u8">
+      <div class="grid-cards" id="m3u8Container"></div>
+    </div>
+    
+    <!-- Pestaña Canales LIVE -->
+    <div class="tab-pane" id="tab-live">
+      <div class="grid-cards" id="liveContainer"></div>
+    </div>
+    
+    <!-- Pestaña Reportes (SOLO ADMIN) -->
+    <div class="tab-pane" id="tab-reports">
+      <div id="adminReportsPanel" style="display: none;">
+        <h3 style="color: #f59e0b; margin-bottom: 1rem;"><i class="fas fa-flag"></i> Reportes de Enlaces Caídos</h3>
+        <div id="reportsList"></div>
+      </div>
+      <div id="noReportsPanel" style="display: none; text-align: center; padding: 3rem;">
+        <i class="fas fa-lock" style="font-size: 3rem; color: #f59e0b;"></i>
+        <p style="margin-top: 1rem;">Solo el administrador puede ver los reportes</p>
+        <button id="goToLoginFromReportsBtn" style="background: #f59e0b; border: none; color: #0f172a; padding: 10px 20px; border-radius: 40px; margin-top: 1rem; cursor: pointer;">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión como Admin
+        </button>
+      </div>
+    </div>
+    
+    <!-- Pestaña Configurar Anuncios (SOLO ADMIN) -->
+    <div class="tab-pane" id="tab-ads">
+      <div id="adminAdsPanel" style="display: none;">
+        <div style="background: #1e293b; border-radius: 20px; padding: 1.5rem;">
+          <h3 style="color: #f59e0b; margin-bottom: 1rem;"><i class="fas fa-coins"></i> Configuración de Anuncios</h3>
+          
+          <label>📢 Banner Nativo (arriba)</label>
+          <textarea id="adsNativeBannerCode" rows="4" placeholder='<script async="async" data-cfasync="false" src="https://pl29351656.profitablecpmratenetwork.com/5393eb9da8b6156ab1ad5d0a7ce99eb6/invoke.js"></script>\n<div id="container-5393eb9da8b6156ab1ad5d0a7ce99eb6"></div>'></textarea>
+          
+          <label>📢 Banner 468x60 (abajo)</label>
+          <textarea id="adsBanner468Code" rows="5" placeholder='<script> atOptions = {...}; </script>\n<script src="https://www.highperformanceformat.com/dee5b460b920f7a7578a11f472bb6291/invoke.js"></script>'></textarea>
+          
+          <label>📢 URL Anuncio Emergente (se abrirá en nueva pestaña)</label>
+          <input type="text" id="adsPopupUrl" placeholder="https://ejemplo.com/anuncio">
+          
+          <label>⏱️ Duración de espera (segundos)</label>
+          <input type="number" id="adsDuration" value="15" min="5" max="60">
+          
+          <button id="saveAdsConfigBtn" style="background: #22c55e; margin-top: 1.5rem;"><i class="fas fa-save"></i> Guardar configuración</button>
+        </div>
+      </div>
+      <div id="noAdminPanel" style="display: none; text-align: center; padding: 3rem;">
+        <i class="fas fa-lock" style="font-size: 3rem; color: #f59e0b;"></i>
+        <p style="margin-top: 1rem;">Solo el administrador puede acceder a esta sección</p>
+        <button id="goToLoginBtn" style="background: #f59e0b; border: none; color: #0f172a; padding: 10px 20px; border-radius: 40px; margin-top: 1rem; cursor: pointer;">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión como Admin
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER INFERIOR (468x60) -->
+<div class="bottom-banner" id="bottomBanner">
+  <div style="text-align:center; color:#94a3b8;">
+    <i class="fas fa-spinner fa-pulse"></i> Cargando banner 468x60...
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <i class="fas fa-tv"></i>
+      <h3>PolosurTV</h3>
+    </div>
+    <p>© 2024 PolosurTV - Todos los derechos reservados</p>
+    <div class="footer-social">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ========== CONFIGURACIÓN DE FIREBASE ==========
+  const firebaseConfig = {
+    apiKey: "AIzaSyAapuKd9U7ahTEUqip6Y_kSH0rSxio-9HQ",
+    authDomain: "biblioteca-de-multimedia-app.firebaseapp.com",
+    projectId: "biblioteca-de-multimedia-app",
+    storageBucket: "biblioteca-de-multimedia-app.firebasestorage.app",
+    messagingSenderId: "835512341306",
+    appId: "1:835512341306:web:afe6b591be0d27fac3b603",
+    measurementId: "G-JC0KY64YJ5"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+  
+  const COLLECTION_NAME = "multimedia_contents";
+  const REPORTS_COLLECTION = "reports";
+  const AD_CONFIG_COLLECTION = "ad_config";
+  const ADMIN_EMAIL = "admin@streamfusion.com";
+
+  // ========== VARIABLES ==========
+  let currentUser = null;
+  let isAdmin = false;
+  let itemsList = [];
+  let reportsList = [];
+  let adConfig = { 
+    duration: 15,
+    nativeBannerCode: "",
+    banner468Code: "",
+    popupAdUrl: ""  // Cambiado de popupAdCode a popupAdUrl
+  };
+  
+  // Variable para almacenar la URL a copiar mientras se espera
+  let pendingCopyUrl = null;
+  let waitingModal = null;
+
+  // Elementos UI
+  const loadingOverlay = document.getElementById("loadingOverlay");
+  const loginBtn = document.getElementById("loginBtn");
+  const registerBtn = document.getElementById("registerBtn");
+  const userInfo = document.getElementById("userInfo");
+  const userEmailSpan = document.getElementById("userEmail");
+  const adminBadge = document.getElementById("adminBadge");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const authButtons = document.getElementById("authButtons");
+  const syncStatusSpan = document.getElementById("syncText");
+  const syncStatusDiv = document.getElementById("syncStatus");
+  const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
+  const monetizationSection = document.getElementById("monetizationSection");
+
+  // ========== FUNCIONES DE ANUNCIOS ==========
+  
+  // Cargar banners en la página
+  function loadBanners() {
+    if (adConfig.nativeBannerCode && adConfig.nativeBannerCode.trim()) {
+      const topBanner = document.getElementById("topBanner");
+      topBanner.innerHTML = adConfig.nativeBannerCode;
+      // Ejecutar scripts del banner nativo
+      const scripts = topBanner.getElementsByTagName('script');
+      for (let i = 0; i < scripts.length; i++) {
+        const script = document.createElement('script');
+        if (scripts[i].src) {
+          script.src = scripts[i].src;
+          script.async = true;
+          script.setAttribute('data-cfasync', 'false');
+        } else {
+          script.text = scripts[i].text;
+        }
+        document.body.appendChild(script);
+      }
+    }
+    
+    if (adConfig.banner468Code && adConfig.banner468Code.trim()) {
+      const bottomBanner = document.getElementById("bottomBanner");
+      bottomBanner.innerHTML = adConfig.banner468Code;
+      const scripts = bottomBanner.getElementsByTagName('script');
+      for (let i = 0; i < scripts.length; i++) {
+        const script = document.createElement('script');
+        if (scripts[i].src) {
+          script.src = scripts[i].src;
+        } else {
+          script.text = scripts[i].text;
+        }
+        document.body.appendChild(script);
+      }
+    }
+  }
+
+  // Abrir anuncio en nueva pestaña y mostrar modal de espera
+  function showWaitingModalWithAd(urlToCopy, duration, popupAdUrl) {
+    return new Promise((resolve) => {
+      // Abrir el anuncio en una nueva pestaña
+      if (popupAdUrl && popupAdUrl.trim()) {
+        window.open(popupAdUrl, '_blank');
+      }
+      
+      // Crear modal de espera en la plataforma principal
+      const modal = document.createElement('div');
+      modal.className = 'waiting-modal';
+      modal.innerHTML = `
+        <div class="waiting-modal-content">
+          <div class="waiting-modal-header">
+            <h2><i class="fas fa-hourglass-half"></i> Espera un momento</h2>
+          </div>
+          <div class="waiting-timer" id="waitingTimer">${duration}</div>
+          <div class="waiting-progress">
+            <div class="waiting-progress-bar" id="waitingProgressBar"></div>
+          </div>
+          <div class="waiting-message" id="waitingMessage">
+            <i class="fas fa-ad"></i> Anuncio abierto en nueva pestaña<br>
+            Espera ${duration} segundos para copiar el enlace
+          </div>
+          <div class="ad-opened-badge">
+            <i class="fas fa-external-link-alt"></i> Si no ves el anuncio, revisa tu bloqueador de pop-ups
+          </div>
+          <button class="copy-unlock-btn" id="waitingCopyBtn">Copiar enlace</button>
+          <div class="close-waiting-btn" id="closeWaitingBtn">✕</div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      
+      let timeLeft = duration;
+      const timerSpan = document.getElementById('waitingTimer');
+      const progressBar = document.getElementById('waitingProgressBar');
+      const copyBtn = document.getElementById('waitingCopyBtn');
+      const closeBtn = document.getElementById('closeWaitingBtn');
+      let canCopy = false;
+      
+      // Actualizar progreso
+      const timer = setInterval(() => {
+        timeLeft--;
+        timerSpan.innerText = timeLeft;
+        const progressPercent = ((duration - timeLeft) / duration) * 100;
+        progressBar.style.width = progressPercent + '%';
+        
+        if (timeLeft <= 0 && !canCopy) {
+          canCopy = true;
+          clearInterval(timer);
+          timerSpan.innerHTML = '<i class="fas fa-check-circle"></i>';
+          document.getElementById('waitingMessage').innerHTML = '<i class="fas fa-check"></i> ¡Tiempo completado! Ya puedes copiar el enlace.';
+          copyBtn.classList.add('active');
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar enlace ahora';
+          closeBtn.classList.add('active');
+          progressBar.style.width = '100%';
+          progressBar.style.background = '#22c55e';
+        }
+      }, 1000);
+      
+      // Botón para copiar
+      copyBtn.addEventListener('click', async () => {
+        if (canCopy) {
+          try {
+            await navigator.clipboard.writeText(urlToCopy);
+            modal.remove();
+            Swal.fire({
+              title: '✅ ¡Enlace copiado!',
+              icon: 'success',
+              timer: 1500,
+              showConfirmButton: false,
+              toast: true,
+              position: 'top-end',
+              background: '#1e293b',
+              color: '#fff'
+            });
+            resolve(true);
+          } catch (err) {
+            const textarea = document.createElement('textarea');
+            textarea.value = urlToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            modal.remove();
+            Swal.fire({
+              title: '✅ ¡Enlace copiado!',
+              icon: 'success',
+              timer: 1500,
+              showConfirmButton: false,
+              toast: true,
+              position: 'top-end'
+            });
+            resolve(true);
+          }
+        }
+      });
+      
+      // Botón para cerrar (solo después del tiempo)
+      closeBtn.addEventListener('click', () => {
+        if (canCopy) {
+          modal.remove();
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  // Función principal para copiar con anuncio
+  async function copyWithAd(url) {
+    if (isAdmin) {
+      // Admin copia directamente
+      try {
+        await navigator.clipboard.writeText(url);
+        Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
+      } catch (err) {
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
+      }
+    } else {
+      // Mostrar modal de espera y abrir anuncio en nueva pestaña
+      await showWaitingModalWithAd(url, adConfig.duration, adConfig.popupAdUrl);
+    }
+  }
+
+  // ========== FUNCIONES DE CONFIGURACIÓN ==========
+  async function loadAdConfig() {
+    try {
+      const docRef = db.collection(AD_CONFIG_COLLECTION).doc("settings");
+      const doc = await docRef.get();
+      if (doc.exists) {
+        adConfig = doc.data();
+      } else {
+        adConfig = { 
+          duration: 15,
+          nativeBannerCode: "",
+          banner468Code: "",
+          popupAdUrl: ""
+        };
+        await docRef.set(adConfig);
+      }
+      loadBanners();
+    } catch (error) {
+      console.error("Error cargando configuración:", error);
+    }
+  }
+
+  async function saveAdConfig(config) {
+    if (!isAdmin) return false;
+    showLoading(true, "Guardando configuración...");
+    try {
+      await db.collection(AD_CONFIG_COLLECTION).doc("settings").set(config, { merge: true });
+      adConfig = config;
+      loadBanners();
+      Swal.fire({ title: '✅ Guardado', icon: 'success', timer: 1500, showConfirmButton: false });
+      showLoading(false);
+      return true;
+    } catch (error) {
+      Swal.fire({ title: '❌ Error', text: error.message, icon: 'error' });
+      showLoading(false);
+      return false;
+    }
+  }
+
+  // ========== FUNCIONES DE REPORTES ==========
+  async function loadReports() {
+    if (!isAdmin) return;
+    try {
+      const snapshot = await db.collection(REPORTS_COLLECTION).orderBy("createdAt", "desc").get();
+      reportsList = [];
+      snapshot.forEach(doc => reportsList.push({ id: doc.id, ...doc.data() }));
+      renderReportsList();
+    } catch (error) {
+      console.error("Error cargando reportes:", error);
+    }
+  }
+
+  function renderReportsList() {
+    const container = document.getElementById("reportsList");
+    if (!container) return;
+    
+    if (reportsList.length === 0) {
+      container.innerHTML = '<div class="empty-message"><i class="fas fa-check-circle" style="font-size: 2rem;"></i><p>No hay reportes pendientes</p></div>';
+      return;
+    }
+    
+    let html = '';
+    for (let report of reportsList) {
+      const date = report.createdAt ? new Date(report.createdAt.toDate()).toLocaleString() : 'Fecha desconocida';
+      html += `
+        <div class="report-item">
+          <div class="report-title">📺 ${escapeHtml(report.contentTitle)}</div>
+          <div class="report-reason"><strong>Motivo:</strong> ${escapeHtml(report.reason)}</div>
+          <div class="report-meta">
+            <span><i class="fas fa-user"></i> ${escapeHtml(report.reportedBy)}</span>
+            <span><i class="fas fa-clock"></i> ${date}</span>
+            <button class="resolve-report-btn" data-id="${report.id}"><i class="fas fa-check"></i> Marcar como resuelto</button>
+          </div>
+        </div>
+      `;
+    }
+    container.innerHTML = html;
+    
+    document.querySelectorAll('.resolve-report-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const reportId = btn.getAttribute('data-id');
+        await resolveReport(reportId);
+      });
+    });
+  }
+
+  async function resolveReport(reportId) {
+    if (!isAdmin) return;
+    const result = await Swal.fire({
+      title: '¿Marcar como resuelto?',
+      text: 'Este reporte se eliminará de la lista',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, resolver',
+      cancelButtonText: 'Cancelar'
+    });
+    if (result.isConfirmed) {
+      try {
+        await db.collection(REPORTS_COLLECTION).doc(reportId).delete();
+        reportsList = reportsList.filter(r => r.id !== reportId);
+        renderReportsList();
+        Swal.fire('Resuelto', 'El reporte ha sido marcado como resuelto', 'success');
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo resolver el reporte', 'error');
+      }
+    }
+  }
+
+  async function createReport(contentId, contentTitle, contentUrl, reason) {
+    if (!currentUser) {
+      Swal.fire('⚠️ Inicia sesión', 'Debes iniciar sesión para reportar contenido', 'warning');
+      return false;
+    }
+    
+    try {
+      await db.collection(REPORTS_COLLECTION).add({
+        contentId: contentId,
+        contentTitle: contentTitle,
+        contentUrl: contentUrl,
+        reason: reason,
+        reportedBy: currentUser.email,
+        reportedById: currentUser.uid,
+        status: "pending",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      Swal.fire({
+        title: '✅ Reporte enviado',
+        text: 'Gracias por ayudarnos a mejorar. El administrador revisará el contenido.',
+        icon: 'success',
+        timer: 3000,
+        showConfirmButton: false
+      });
+      return true;
+    } catch (error) {
+      Swal.fire('Error', 'No se pudo enviar el reporte', 'error');
+      return false;
+    }
+  }
+
+  function showReportModal(contentId, contentTitle, contentUrl) {
+    Swal.fire({
+      title: '📢 Reportar contenido',
+      html: `
+        <div style="text-align: left;">
+          <p><strong>Contenido:</strong> ${escapeHtml(contentTitle)}</p>
+          <label style="display: block; margin-top: 15px; margin-bottom: 5px;">Motivo del reporte:</label>
+          <select id="reportReason" style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; color: white; border: 1px solid #334155;">
+            <option value="Enlace caído / No funciona">🔗 Enlace caído / No funciona</option>
+            <option value="Contenido incorrecto">❌ Contenido incorrecto</option>
+            <option value="Calidad de video baja">📹 Calidad de video baja</option>
+            <option value="No es lo que promete">⚠️ No es lo que promete</option>
+            <option value="Contenido inapropiado">🚫 Contenido inapropiado</option>
+            <option value="Otro">📝 Otro</option>
+          </select>
+          <textarea id="reportDetails" rows="3" style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 8px; background: #1e293b; color: white; border: 1px solid #334155;" placeholder="Describe el problema (opcional)"></textarea>
+        </div>
+      `,
+      background: '#1e293b',
+      color: '#fff',
+      showCancelButton: true,
+      confirmButtonText: 'Enviar reporte',
+      cancelButtonText: 'Cancelar',
+      preConfirm: () => {
+        const reason = document.getElementById('reportReason').value;
+        const details = document.getElementById('reportDetails').value;
+        const fullReason = details ? `${reason}: ${details}` : reason;
+        return { reason: fullReason };
+      }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await createReport(contentId, contentTitle, contentUrl, result.value.reason);
+      }
+    });
+  }
+
+  // ========== FUNCIONES DE UI ==========
+  function showLoading(show, text = "Cargando...") {
+    loadingOverlay.style.display = show ? "flex" : "none";
+    if (show && document.querySelector(".loading-overlay p")) {
+      document.querySelector(".loading-overlay p").innerText = text;
+    }
+  }
+
+  function updateUIForUser() {
+    if (currentUser) {
+      authButtons.style.display = "none";
+      userInfo.style.display = "flex";
+      userEmailSpan.innerText = currentUser.email;
+      isAdmin = currentUser.email === ADMIN_EMAIL;
+      adminBadge.style.display = isAdmin ? "inline-block" : "none";
+      sidebarToggleBtn.style.display = "flex";
+      monetizationSection.style.display = isAdmin ? "block" : "none";
+      
+      const reportsTab = document.getElementById('reportsTabBtn');
+      const adsTab = document.getElementById('adsTabBtn');
+      
+      if (isAdmin) {
+        if (reportsTab) reportsTab.style.display = "flex";
+        if (adsTab) adsTab.style.display = "flex";
+        
+        const adminReportsPanel = document.getElementById("adminReportsPanel");
+        const noReportsPanel = document.getElementById("noReportsPanel");
+        const adminAdsPanel = document.getElementById("adminAdsPanel");
+        const noAdminPanel = document.getElementById("noAdminPanel");
+        
+        if (adminReportsPanel) adminReportsPanel.style.display = "block";
+        if (noReportsPanel) noReportsPanel.style.display = "none";
+        if (adminAdsPanel) adminAdsPanel.style.display = "block";
+        if (noAdminPanel) noAdminPanel.style.display = "none";
+        
+        loadReports();
+        // Cargar datos en pestaña de anuncios
+        document.getElementById("adsNativeBannerCode").value = adConfig.nativeBannerCode || "";
+        document.getElementById("adsBanner468Code").value = adConfig.banner468Code || "";
+        document.getElementById("adsPopupUrl").value = adConfig.popupAdUrl || "";
+        document.getElementById("adsDuration").value = adConfig.duration || 15;
+        
+        // Cargar en el sidebar también
+        document.getElementById("nativeBannerCode").value = adConfig.nativeBannerCode || "";
+        document.getElementById("banner468Code").value = adConfig.banner468Code || "";
+        document.getElementById("popupAdUrl").value = adConfig.popupAdUrl || "";
+        document.getElementById("adDuration").value = adConfig.duration || 15;
+      } else {
+        if (reportsTab) reportsTab.style.display = "none";
+        if (adsTab) adsTab.style.display = "none";
+        
+        const adminReportsPanel = document.getElementById("adminReportsPanel");
+        const noReportsPanel = document.getElementById("noReportsPanel");
+        const adminAdsPanel = document.getElementById("adminAdsPanel");
+        const noAdminPanel = document.getElementById("noAdminPanel");
+        
+        if (adminReportsPanel) adminReportsPanel.style.display = "none";
+        if (noReportsPanel) noReportsPanel.style.display = "block";
+        if (adminAdsPanel) adminAdsPanel.style.display = "none";
+        if (noAdminPanel) noAdminPanel.style.display = "block";
+      }
+    } else {
+      authButtons.style.display = "flex";
+      userInfo.style.display = "none";
+      isAdmin = false;
+      sidebarToggleBtn.style.display = "none";
+      monetizationSection.style.display = "none";
+      
+      const reportsTab = document.getElementById('reportsTabBtn');
+      const adsTab = document.getElementById('adsTabBtn');
+      if (reportsTab) reportsTab.style.display = "none";
+      if (adsTab) adsTab.style.display = "none";
+      
+      if (sidebar.classList.contains("open")) closeSidebar();
+    }
+    renderAllSections();
+  }
+
+  function updateSyncStatus(status, isError = false) {
+    syncStatusSpan.innerText = status;
+    if (isError) syncStatusDiv.classList.add("offline");
+    else syncStatusDiv.classList.add("online");
+  }
+
+  // ========== FIRESTORE OPERATIONS ==========
+  async function loadFromFirestore() {
+    showLoading(true, "Cargando...");
+    try {
+      const snapshot = await db.collection(COLLECTION_NAME).orderBy("createdAt", "desc").get();
+      itemsList = [];
+      snapshot.forEach(doc => itemsList.push({ id: doc.id, ...doc.data() }));
+      renderAllSections();
+      showLoading(false);
+    } catch (error) {
+      console.error(error);
+      showLoading(false);
+    }
+  }
+
+  async function addToFirestore(item) {
+    if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return false; }
+    showLoading(true, "Guardando...");
+    try {
+      const docRef = await db.collection(COLLECTION_NAME).add({
+        ...item,
+        createdBy: currentUser.email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      item.id = docRef.id;
+      itemsList.unshift(item);
+      renderAllSections();
+      showLoading(false);
+      return true;
+    } catch (error) {
+      showLoading(false);
+      Swal.fire('Error', 'No se pudo guardar', 'error');
+      return false;
+    }
+  }
+
+  async function deleteFromFirestore(id) {
+    if (!isAdmin) { Swal.fire('⛔ Acceso denegado', 'Solo el administrador puede eliminar', 'error'); return false; }
+    showLoading(true, "Eliminando...");
+    try {
+      await db.collection(COLLECTION_NAME).doc(id).delete();
+      itemsList = itemsList.filter(i => i.id !== id);
+      renderAllSections();
+      showLoading(false);
+      return true;
+    } catch (error) {
+      showLoading(false);
+      Swal.fire('Error', 'No se pudo eliminar', 'error');
+      return false;
+    }
+  }
+
+  function renderAllSections() {
+    renderContainer("driveContainer", itemsList.filter(i => i.type === "drive"));
+    renderContainer("mp4Container", itemsList.filter(i => i.type === "mp4"));
+    renderContainer("m3u8Container", itemsList.filter(i => i.type === "m3u8"));
+    renderContainer("liveContainer", itemsList.filter(i => i.type === "live"));
+  }
+
+  function renderContainer(containerId, items) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (items.length === 0) {
+      container.innerHTML = `<div class="empty-message"><i class="fas fa-folder-open" style="font-size: 2rem;"></i><p>Sin elementos</p></div>`;
+      return;
+    }
+    let html = "";
+    for (let item of items) {
+      let badge = "", badgeColor = "";
+      if (item.type === "drive") { badge = "📁 Drive"; badgeColor = "#0f9d58"; }
+      else if (item.type === "mp4") { badge = "🎬 MP4"; badgeColor = "#dc2626"; }
+      else if (item.type === "m3u8") { badge = "📡 M3U8"; badgeColor = "#7c3aed"; }
+      else if (item.type === "live") { badge = "📺 LIVE"; badgeColor = "#f59e0b"; }
+      
+      html += `
+        <div class="card">
+          <img class="card-img" src="${item.img || 'https://via.placeholder.com/200x180?text=No+image'}" onerror="this.src='https://via.placeholder.com/200x180?text=No+image'">
+          <div class="card-body">
+            <div class="card-title">${escapeHtml(item.title)}</div>
+            <div class="card-source" style="background: ${badgeColor}20; color: ${badgeColor};">${badge}</div>
+            <button class="btn-preview" onclick="openPreviewFromUrl('${escapeUrl(item.url)}')"><i class="fas fa-play"></i> Ver</button>
+            <button class="copy-btn-card" data-url="${escapeUrl(item.url)}"><i class="fas fa-copy"></i> Copiar</button>
+            <button class="report-btn" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-url="${escapeUrl(item.url)}"><i class="fas fa-flag"></i> Reportar</button>
+            <button class="delete-btn" data-id="${item.id}" ${!isAdmin ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isAdmin ? 'Eliminar' : 'Admin'}</button>
+          </div>
+        </div>
+      `;
+    }
+    container.innerHTML = html;
+
+    document.querySelectorAll(`#${containerId} .copy-btn-card`).forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const url = btn.getAttribute("data-url");
+        if (url) await copyWithAd(url);
+      });
+    });
+    
+    document.querySelectorAll(`#${containerId} .report-btn`).forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = btn.getAttribute("data-id");
+        const title = btn.getAttribute("data-title");
+        const url = btn.getAttribute("data-url");
+        showReportModal(id, title, url);
+      });
+    });
+    
+    document.querySelectorAll(`#${containerId} .delete-btn`).forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const id = btn.getAttribute("data-id");
+        const result = await Swal.fire({ title: '¿Eliminar?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#dc2626', confirmButtonText: 'Sí', cancelButtonText: 'Cancelar' });
+        if (result.isConfirmed) await deleteFromFirestore(id);
+      });
+    });
+  }
+
+  // ========== AUTHENTICATION ==========
+  async function registerUser() {
+    const result = await Swal.fire({
+      title: '📝 Registro',
+      html: `<input type="email" id="regEmail" class="swal2-input" placeholder="Email"><input type="password" id="regPassword" class="swal2-input" placeholder="Contraseña (mín 6)"><input type="password" id="regConfirm" class="swal2-input" placeholder="Confirmar">`,
+      background: '#1e293b', color: '#fff',
+      showCancelButton: true, confirmButtonText: 'Registrarse',
+      preConfirm: () => {
+        const email = document.getElementById('regEmail').value;
+        const pwd = document.getElementById('regPassword').value;
+        const confirm = document.getElementById('regConfirm').value;
+        if (!email || !pwd) return Swal.showValidationMessage('Completa los campos');
+        if (pwd !== confirm) return Swal.showValidationMessage('Las contraseñas no coinciden');
+        if (pwd.length < 6) return Swal.showValidationMessage('Mínimo 6 caracteres');
+        return { email, password: pwd };
+      }
+    });
+    if (result.value) {
+      showLoading(true, "Creando cuenta...");
+      try {
+        await auth.createUserWithEmailAndPassword(result.value.email, result.value.password);
+        Swal.fire({ title: '✅ Registro exitoso', icon: 'success', timer: 1500, showConfirmButton: false });
+      } catch (error) {
+        Swal.fire({ title: '❌ Error', text: error.message, icon: 'error' });
+      } finally { showLoading(false); }
+    }
+  }
+
+  async function loginUser() {
+    const result = await Swal.fire({
+      title: '🔐 Iniciar Sesión',
+      html: `<input type="email" id="loginEmail" class="swal2-input" placeholder="Email"><input type="password" id="loginPassword" class="swal2-input" placeholder="Contraseña">`,
+      background: '#1e293b', color: '#fff',
+      showCancelButton: true, confirmButtonText: 'Ingresar',
+      preConfirm: () => ({ email: document.getElementById('loginEmail').value, password: document.getElementById('loginPassword').value })
+    });
+    if (result.value) {
+      showLoading(true, "Iniciando...");
+      try {
+        await auth.signInWithEmailAndPassword(result.value.email, result.value.password);
+        Swal.fire({ title: '✅ Bienvenido', icon: 'success', timer: 1500, showConfirmButton: false });
+      } catch (error) {
+        Swal.fire({ title: '❌ Error', text: error.message, icon: 'error' });
+      } finally { showLoading(false); }
+    }
+  }
+
+  async function logout() { await auth.signOut(); }
+
+  // ========== REPRODUCTOR ==========
+  const testUrlInput = document.getElementById("testUrl");
+  const btnTest = document.getElementById("btnTestUrl");
+  const testVideo = document.getElementById("testVideo");
+  const testIframe = document.getElementById("testIframe");
+  const testStatus = document.getElementById("testStatus");
+  let currentHls = null;
+
+  function detectAndPlay(url) {
+    if (currentHls) { currentHls.destroy(); currentHls = null; }
+    testVideo.style.display = "none";
+    testIframe.style.display = "none";
+    testVideo.pause();
+    testIframe.src = "about:blank";
+    
+    const urlLow = url.toLowerCase();
+    if (urlLow.includes("drive.google.com")) {
+      let embedUrl = url;
+      const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (match) embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+      testIframe.style.display = "block";
+      testIframe.src = embedUrl;
+      testStatus.innerText = "✅ Reproduciendo Drive";
+      return;
+    }
+    if (urlLow.includes(".m3u8")) {
+      if (Hls.isSupported()) {
+        testVideo.style.display = "block";
+        testVideo.controls = true;
+        currentHls = new Hls();
+        currentHls.loadSource(url);
+        currentHls.attachMedia(testVideo);
+        testStatus.innerText = "📡 M3U8";
+      } else { testStatus.innerText = "❌ M3U8 no soportado"; }
+      return;
+    }
+    if (urlLow.includes(".mp4")) {
+      testVideo.style.display = "block";
+      testVideo.src = url;
+      testVideo.play().catch(() => {});
+      testStatus.innerText = "🎬 MP4";
+      return;
+    }
+    testIframe.style.display = "block";
+    testIframe.src = url;
+    testStatus.innerText = "🌐 Iframe";
+  }
+
+  btnTest.addEventListener("click", () => {
+    let url = testUrlInput.value.trim();
+    if (!url) { testStatus.innerText = "❌ Escribe un enlace"; return; }
+    detectAndPlay(url);
+  });
+
+  window.openPreviewFromUrl = function(url) {
+    testUrlInput.value = url;
+    detectAndPlay(url);
+  };
+
+  // ========== SIDEBAR Y PESTAÑAS ==========
+  const sidebar = document.getElementById("sidebar");
+  const closeBtn = document.getElementById("closeSidebarBtn");
+
+  function openSidebar() {
+    if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return; }
+    sidebar.classList.add("open");
+    sidebarToggleBtn.style.opacity = "0";
+    sidebarToggleBtn.style.pointerEvents = "none";
+  }
+  function closeSidebar() {
+    sidebar.classList.remove("open");
+    sidebarToggleBtn.style.opacity = "1";
+    sidebarToggleBtn.style.pointerEvents = "auto";
+  }
+  sidebarToggleBtn.addEventListener("click", openSidebar);
+  closeBtn.addEventListener("click", closeSidebar);
+  document.addEventListener("click", (e) => {
+    if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && !sidebarToggleBtn.contains(e.target)) closeSidebar();
+  });
+
+  function setupTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        const activePane = document.getElementById(`tab-${tabId}`);
+        if (activePane) activePane.classList.add('active');
+      });
+    });
+  }
+
+  // ========== AGREGAR ==========
+  document.getElementById("btnAddItem").addEventListener("click", async () => {
+    if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return; }
+    const title = document.getElementById("inputTitle").value.trim();
+    const url = document.getElementById("inputUrl").value.trim();
+    const type = document.getElementById("inputType").value;
+    let img = document.getElementById("inputImg").value.trim();
+    if (!title || !url) { Swal.fire('Error', 'Completa título y enlace', 'error'); return; }
+    if (!img) img = "https://via.placeholder.com/200x180?text=Media";
+    const success = await addToFirestore({ title, type, url, img });
+    if (success) {
+      document.getElementById("inputTitle").value = "";
+      document.getElementById("inputUrl").value = "";
+      Swal.fire('✅ Agregado', 'Contenido guardado', 'success', { timer: 1500 });
+      closeSidebar();
+    }
+  });
+
+  // ========== GUARDAR CONFIGURACIÓN DE ANUNCIOS ==========
+  document.getElementById("saveAdsConfigBtn").addEventListener("click", async () => {
+    if (!isAdmin) return;
+    const config = {
+      nativeBannerCode: document.getElementById("adsNativeBannerCode").value,
+      banner468Code: document.getElementById("adsBanner468Code").value,
+      popupAdUrl: document.getElementById("adsPopupUrl").value,
+      duration: parseInt(document.getElementById("adsDuration").value) || 15
+    };
+    if (config.duration < 5) config.duration = 5;
+    if (config.duration > 60) config.duration = 60;
+    await saveAdConfig(config);
+  });
+
+  document.getElementById("btnSaveAdConfig").addEventListener("click", async () => {
+    if (!isAdmin) return;
+    const config = {
+      nativeBannerCode: document.getElementById("nativeBannerCode").value,
+      banner468Code: document.getElementById("banner468Code").value,
+      popupAdUrl: document.getElementById("popupAdUrl").value,
+      duration: parseInt(document.getElementById("adDuration").value) || 15
+    };
+    if (config.duration < 5) config.duration = 5;
+    if (config.duration > 60) config.duration = 60;
+    await saveAdConfig(config);
+  });
+
+  // Botones para ir a login
+  document.getElementById("goToLoginBtn")?.addEventListener("click", () => loginUser());
+  document.getElementById("goToLoginFromReportsBtn")?.addEventListener("click", () => loginUser());
+
+  // ========== TMDb SEARCH ==========
+  const TMDB_API = "f3e064ad91ca31d7dfb85a60eed82d71";
+  const TMDB_IMG = "https://image.tmdb.org/t/p/w200";
+  const tmdbInput = document.getElementById("tmdbQuery");
+  const tmdbResultsDiv = document.getElementById("tmdbResults");
+  let debT;
+
+  tmdbInput.addEventListener("input", () => {
+    const q = tmdbInput.value.trim();
+    if (q.length < 2) { tmdbResultsDiv.style.display = "none"; return; }
+    clearTimeout(debT);
+    debT = setTimeout(() => searchTMDB(q), 500);
+  });
+
+  async function searchTMDB(query) {
+    try {
+      const resp = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API}&language=es&query=${encodeURIComponent(query)}`);
+      const data = await resp.json();
+      if (!data.results || !data.results.length) {
+        tmdbResultsDiv.innerHTML = "<div style='padding:6px'>Sin resultados</div>";
+        tmdbResultsDiv.style.display = "block";
+        return;
+      }
+      let html = "";
+      data.results.slice(0, 7).forEach(r => {
+        const nombre = r.title || r.name;
+        const poster = r.poster_path ? TMDB_IMG + r.poster_path : "";
+        html += `<div class="tmdb-item" data-title="${escapeHtml(nombre)}" data-poster="${poster}">🎬 ${escapeHtml(nombre)}</div>`;
+      });
+      tmdbResultsDiv.innerHTML = html;
+      tmdbResultsDiv.style.display = "block";
+      document.querySelectorAll(".tmdb-item").forEach(el => {
+        el.addEventListener("click", () => {
+          document.getElementById("inputTitle").value = el.getAttribute("data-title");
+          const post = el.getAttribute("data-poster");
+          if (post) document.getElementById("inputImg").value = post;
+          tmdbResultsDiv.style.display = "none";
+          tmdbInput.value = "";
+        });
+      });
+    } catch (e) { console.error(e); }
+  }
+
+  document.addEventListener("click", (e) => {
+    if (!tmdbInput.contains(e.target) && !tmdbResultsDiv.contains(e.target)) tmdbResultsDiv.style.display = "none";
+  });
+
+  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&'; if(m==='<') return '<'; if(m==='>') return '>'; return m;}); }
+  function escapeUrl(url) { return url.replace(/'/g, "\\'"); }
+
+  document.getElementById("telegramLink").href = "https://t.me/tu_usuario";
+  document.getElementById("webLink").href = "https://polosurtv.com";
+
+  // ========== EVENTOS ==========
+  loginBtn.addEventListener("click", loginUser);
+  registerBtn.addEventListener("click", registerUser);
+  logoutBtn.addEventListener("click", logout);
+
+  // ========== INICIALIZAR ==========
+  auth.onAuthStateChanged(async (user) => {
+    currentUser = user;
+    await loadAdConfig();
+    updateUIForUser();
+    await loadFromFirestore();
+    setupTabs();
+  });
+</script>
+</body>
+</html>
