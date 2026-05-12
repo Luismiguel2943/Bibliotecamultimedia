@@ -132,19 +132,21 @@
     .floating-icon.web { background: #f59e0b; }
     .floating-icon i { font-size: 22px; }
 
-    /* BANNER SUPERIOR (Nativo) */
-    .top-banner {
+    /* BANNER 468x60 debajo del header */
+    .top-banner-468 {
       text-align: center;
-      padding: 0.5rem;
+      padding: 0.75rem;
       background: #1e293b;
-      margin: 0.5rem 1rem;
-      border-radius: 16px;
-      min-height: 100px;
+      margin: 0.5rem auto;
+      border-radius: 12px;
+      max-width: 100%;
+      overflow-x: auto;
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 90px;
     }
-    .top-banner iframe, .top-banner ins {
+    .top-banner-468 iframe, .top-banner-468 ins {
       max-width: 100%;
       margin: 0 auto;
     }
@@ -205,8 +207,8 @@
     }
     .tmdb-search {
       background: #1e293b;
-      border-radius: 16px;
-      padding: 10px;
+      border-radius: 24px;
+      padding: 12px;
       margin: 12px 0;
     }
     .tmdb-results {
@@ -216,8 +218,8 @@
       border-radius: 12px;
       margin-top: 6px;
     }
-    .tmdb-item { padding: 6px; border-bottom: 1px solid #334155; cursor: pointer; font-size: 0.75rem; }
-    .tmdb-item:hover { background: #334155; }
+    .tmdb-item { padding: 8px; border-bottom: 1px solid #334155; cursor: pointer; font-size: 0.75rem; transition: 0.2s; }
+    .tmdb-item:hover { background: #334155; color: #f59e0b; }
 
     /* Reproductor de prueba */
     .preview-panel {
@@ -278,31 +280,53 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Tarjetas */
+    /* Tarjetas mejoradas */
     .grid-cards {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 1rem;
       justify-content: flex-start;
     }
     .card {
       background: #0f172a;
       border-radius: 16px;
       width: calc(20% - 0.8rem);
-      min-width: 150px;
+      min-width: 170px;
       overflow: hidden;
       border: 1px solid #334155;
-      transition: 0.2s;
+      transition: all 0.3s ease;
       position: relative;
     }
-    .card:hover { transform: translateY(-3px); border-color: #f59e0b; }
+    .card:hover { transform: translateY(-5px); border-color: #f59e0b; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
     .card-img {
       width: 100%;
-      height: 180px;
+      height: 240px;
       object-fit: cover;
+      transition: transform 0.3s ease;
     }
-    .card-body { padding: 8px; }
-    .card-title { font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card:hover .card-img { transform: scale(1.05); }
+    .card-body { padding: 10px; }
+    .card-title { 
+      font-weight: bold; 
+      font-size: 0.85rem; 
+      margin-bottom: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 1.3;
+      min-height: 38px;
+    }
+    .card-year {
+      font-size: 0.7rem;
+      color: #f59e0b;
+      margin-bottom: 5px;
+      display: inline-block;
+      background: #f59e0b20;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
     .card-source {
       font-size: 0.6rem;
       background: #334155;
@@ -311,31 +335,26 @@
       border-radius: 20px;
       margin: 4px 0;
     }
-    .btn-preview {
-      background: #2563eb;
-      border: none;
-      color: white;
-      border-radius: 40px;
-      padding: 5px;
-      width: 100%;
-      margin-bottom: 4px;
-      cursor: pointer;
-      font-size: 0.7rem;
-    }
-    .copy-btn-card, .delete-btn, .report-btn {
+    .btn-preview, .copy-btn-card, .report-btn, .delete-btn {
       border: none;
       border-radius: 40px;
-      padding: 5px;
+      padding: 6px;
       width: 100%;
-      margin-top: 4px;
+      margin-top: 5px;
       cursor: pointer;
       font-size: 0.7rem;
+      transition: all 0.2s ease;
+      font-weight: 500;
     }
+    .btn-preview { background: #2563eb; color: white; }
+    .btn-preview:hover { background: #1d4ed8; transform: scale(1.02); }
     .copy-btn-card { background: #475569; color: white; }
+    .copy-btn-card:hover { background: #334155; transform: scale(1.02); }
     .delete-btn { background: #dc2626; color: white; }
     .delete-btn:disabled { background: #7f8c8d; cursor: not-allowed; opacity: 0.6; }
+    .delete-btn:hover:not(:disabled) { background: #b91c1c; transform: scale(1.02); }
     .report-btn { background: #f59e0b; color: #0f172a; }
-    .report-btn:hover { background: #d97706; }
+    .report-btn:hover { background: #d97706; transform: scale(1.02); }
     .empty-message {
       text-align: center;
       padding: 40px;
@@ -537,38 +556,26 @@
     @media (max-width: 768px) {
       .sidebar { width: 100%; left: -100%; }
       .tab-btn { padding: 8px 12px; font-size: 0.7rem; min-width: 70px; }
-      .card { width: calc(33.333% - 0.6rem); min-width: 100px; }
-      .card-img { height: 140px; }
-      .card-title { font-size: 0.7rem; white-space: normal; }
+      .card { width: calc(33.333% - 0.7rem); min-width: 110px; }
+      .card-img { height: 160px; }
+      .card-title { font-size: 0.7rem; -webkit-line-clamp: 2; min-height: 32px; }
+      .card-year { font-size: 0.6rem; }
       .waiting-modal-content { padding: 1rem; width: 95%; }
       .waiting-timer { font-size: 3rem; }
     }
     @media (max-width: 480px) {
-      .card { min-width: 90px; }
-      .card-img { height: 120px; }
+      .card { min-width: 100px; }
+      .card-img { height: 140px; }
       .tab-btn { padding: 6px 8px; font-size: 0.6rem; min-width: 55px; }
     }
     @media (min-width: 1200px) {
-      .card { width: calc(16.666% - 0.8rem); }
+      .card { width: calc(16.666% - 0.85rem); }
     }
   </style>
 </head>
 <body>
 
-<!-- BANNER SUPERIOR (Nativo) -->
-<div class="top-banner" id="topBanner">
-  <div style="text-align:center; color:#94a3b8;">
-    <i class="fas fa-spinner fa-pulse"></i> Cargando banner nativo...
-  </div>
-</div>
-
-<!-- Loading overlay -->
-<div id="loadingOverlay" class="loading-overlay" style="display: none;">
-  <div class="loading-spinner"></div>
-  <p style="font-size: 0.8rem;">Sincronizando...</p>
-</div>
-
-<!-- Header -->
+<!-- HEADER -->
 <header class="header">
   <div class="logo">
     <div class="logo-icon"><i class="fas fa-tv"></i></div>
@@ -594,6 +601,19 @@
   </div>
 </header>
 
+<!-- BANNER 468x60 debajo del header -->
+<div class="top-banner-468" id="topBanner468">
+  <div style="text-align:center; color:#94a3b8;">
+    <i class="fas fa-spinner fa-pulse"></i> Cargando banner 468x60...
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+  <div class="loading-spinner"></div>
+  <p style="font-size: 0.8rem;">Sincronizando...</p>
+</div>
+
 <!-- Iconos flotantes -->
 <div class="floating-icons">
   <a href="#" target="_blank" class="floating-icon telegram" id="telegramLink"><i class="fab fa-telegram-plane"></i></a>
@@ -615,6 +635,9 @@
   <label>Título *</label>
   <input type="text" id="inputTitle" placeholder="Ej: Avatar 2">
   
+  <label>Año (opcional)</label>
+  <input type="text" id="inputYear" placeholder="Ej: 2022">
+  
   <label>Imagen URL</label>
   <input type="text" id="inputImg" placeholder="https://...jpg">
   
@@ -634,10 +657,10 @@
     <div style="background: #f59e0b20; border-radius: 16px; padding: 0.8rem; margin: 0.8rem 0; border: 1px solid #f59e0b;">
       <label style="color: #f59e0b;"><i class="fas fa-coins"></i> Monetización</label>
       
-      <label>📢 Banner Nativo (script)</label>
-      <textarea id="nativeBannerCode" rows="4" placeholder='<script async="async" data-cfasync="false" src="https://pl29351656.profitablecpmratenetwork.com/5393eb9da8b6156ab1ad5d0a7ce99eb6/invoke.js"></script>\n<div id="container-5393eb9da8b6156ab1ad5d0a7ce99eb6"></div>'></textarea>
+      <label>📢 Banner 468x60 (debajo del header)</label>
+      <textarea id="nativeBannerCode" rows="5" placeholder='<script> atOptions = {...}; </script>\n<script src="https://www.highperformanceformat.com/dee5b460b920f7a7578a11f472bb6291/invoke.js"></script>'></textarea>
       
-      <label>📢 Banner 468x60 (script)</label>
+      <label>📢 Banner 468x60 (abajo)</label>
       <textarea id="banner468Code" rows="5" placeholder="<script> atOptions = {...}; </script><script src='...'></script>"></textarea>
       
       <label>📢 URL Anuncio Emergente (para abrir en nueva pestaña)</label>
@@ -663,7 +686,7 @@
   </div>
 
   <div class="tmdb-search">
-    <label><i class="fab fa-imdb"></i> Buscar en TMDb</label>
+    <label><i class="fab fa-imdb"></i> Buscar en TMDb (obtiene título, año y poster)</label>
     <input type="text" id="tmdbQuery" placeholder="Película/serie...">
     <div id="tmdbResults" class="tmdb-results" style="display:none;"></div>
   </div>
@@ -737,8 +760,8 @@
         <div style="background: #1e293b; border-radius: 20px; padding: 1.5rem;">
           <h3 style="color: #f59e0b; margin-bottom: 1rem;"><i class="fas fa-coins"></i> Configuración de Anuncios</h3>
           
-          <label>📢 Banner Nativo (arriba)</label>
-          <textarea id="adsNativeBannerCode" rows="4" placeholder='<script async="async" data-cfasync="false" src="https://pl29351656.profitablecpmratenetwork.com/5393eb9da8b6156ab1ad5d0a7ce99eb6/invoke.js"></script>\n<div id="container-5393eb9da8b6156ab1ad5d0a7ce99eb6"></div>'></textarea>
+          <label>📢 Banner 468x60 (debajo del header)</label>
+          <textarea id="adsNativeBannerCode" rows="5" placeholder='<script> atOptions = {...}; </script>\n<script src="https://www.highperformanceformat.com/dee5b460b920f7a7578a11f472bb6291/invoke.js"></script>'></textarea>
           
           <label>📢 Banner 468x60 (abajo)</label>
           <textarea id="adsBanner468Code" rows="5" placeholder='<script> atOptions = {...}; </script>\n<script src="https://www.highperformanceformat.com/dee5b460b920f7a7578a11f472bb6291/invoke.js"></script>'></textarea>
@@ -766,7 +789,7 @@
 <!-- BANNER INFERIOR (468x60) -->
 <div class="bottom-banner" id="bottomBanner">
   <div style="text-align:center; color:#94a3b8;">
-    <i class="fas fa-spinner fa-pulse"></i> Cargando banner 468x60...
+    <i class="fas fa-spinner fa-pulse"></i> Cargando banner inferior...
   </div>
 </div>
 
@@ -817,10 +840,9 @@
     duration: 15,
     nativeBannerCode: "",
     banner468Code: "",
-    popupAdUrl: ""  // Cambiado de popupAdCode a popupAdUrl
+    popupAdUrl: ""
   };
   
-  // Variable para almacenar la URL a copiar mientras se espera
   let pendingCopyUrl = null;
   let waitingModal = null;
 
@@ -840,13 +862,12 @@
 
   // ========== FUNCIONES DE ANUNCIOS ==========
   
-  // Cargar banners en la página
   function loadBanners() {
+    // Banner superior (468x60 debajo del header)
     if (adConfig.nativeBannerCode && adConfig.nativeBannerCode.trim()) {
-      const topBanner = document.getElementById("topBanner");
-      topBanner.innerHTML = adConfig.nativeBannerCode;
-      // Ejecutar scripts del banner nativo
-      const scripts = topBanner.getElementsByTagName('script');
+      const topBanner468 = document.getElementById("topBanner468");
+      topBanner468.innerHTML = adConfig.nativeBannerCode;
+      const scripts = topBanner468.getElementsByTagName('script');
       for (let i = 0; i < scripts.length; i++) {
         const script = document.createElement('script');
         if (scripts[i].src) {
@@ -860,6 +881,7 @@
       }
     }
     
+    // Banner inferior
     if (adConfig.banner468Code && adConfig.banner468Code.trim()) {
       const bottomBanner = document.getElementById("bottomBanner");
       bottomBanner.innerHTML = adConfig.banner468Code;
@@ -876,15 +898,12 @@
     }
   }
 
-  // Abrir anuncio en nueva pestaña y mostrar modal de espera
-  function showWaitingModalWithAd(urlToCopy, duration, popupAdUrl) {
+  async function showWaitingModalWithAd(urlToCopy, duration, popupAdUrl) {
     return new Promise((resolve) => {
-      // Abrir el anuncio en una nueva pestaña
       if (popupAdUrl && popupAdUrl.trim()) {
         window.open(popupAdUrl, '_blank');
       }
       
-      // Crear modal de espera en la plataforma principal
       const modal = document.createElement('div');
       modal.className = 'waiting-modal';
       modal.innerHTML = `
@@ -916,7 +935,6 @@
       const closeBtn = document.getElementById('closeWaitingBtn');
       let canCopy = false;
       
-      // Actualizar progreso
       const timer = setInterval(() => {
         timeLeft--;
         timerSpan.innerText = timeLeft;
@@ -936,22 +954,12 @@
         }
       }, 1000);
       
-      // Botón para copiar
       copyBtn.addEventListener('click', async () => {
         if (canCopy) {
           try {
             await navigator.clipboard.writeText(urlToCopy);
             modal.remove();
-            Swal.fire({
-              title: '✅ ¡Enlace copiado!',
-              icon: 'success',
-              timer: 1500,
-              showConfirmButton: false,
-              toast: true,
-              position: 'top-end',
-              background: '#1e293b',
-              color: '#fff'
-            });
+            Swal.fire({ title: '✅ ¡Enlace copiado!', icon: 'success', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end', background: '#1e293b', color: '#fff' });
             resolve(true);
           } catch (err) {
             const textarea = document.createElement('textarea');
@@ -961,20 +969,12 @@
             document.execCommand('copy');
             document.body.removeChild(textarea);
             modal.remove();
-            Swal.fire({
-              title: '✅ ¡Enlace copiado!',
-              icon: 'success',
-              timer: 1500,
-              showConfirmButton: false,
-              toast: true,
-              position: 'top-end'
-            });
+            Swal.fire({ title: '✅ ¡Enlace copiado!', icon: 'success', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end' });
             resolve(true);
           }
         }
       });
       
-      // Botón para cerrar (solo después del tiempo)
       closeBtn.addEventListener('click', () => {
         if (canCopy) {
           modal.remove();
@@ -984,10 +984,8 @@
     });
   }
 
-  // Función principal para copiar con anuncio
   async function copyWithAd(url) {
     if (isAdmin) {
-      // Admin copia directamente
       try {
         await navigator.clipboard.writeText(url);
         Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
@@ -1001,7 +999,6 @@
         Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
       }
     } else {
-      // Mostrar modal de espera y abrir anuncio en nueva pestaña
       await showWaitingModalWithAd(url, adConfig.duration, adConfig.popupAdUrl);
     }
   }
@@ -1131,13 +1128,7 @@
         status: "pending",
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      Swal.fire({
-        title: '✅ Reporte enviado',
-        text: 'Gracias por ayudarnos a mejorar. El administrador revisará el contenido.',
-        icon: 'success',
-        timer: 3000,
-        showConfirmButton: false
-      });
+      Swal.fire({ title: '✅ Reporte enviado', text: 'Gracias por ayudarnos a mejorar', icon: 'success', timer: 3000, showConfirmButton: false });
       return true;
     } catch (error) {
       Swal.fire('Error', 'No se pudo enviar el reporte', 'error');
@@ -1217,13 +1208,12 @@
         if (noAdminPanel) noAdminPanel.style.display = "none";
         
         loadReports();
-        // Cargar datos en pestaña de anuncios
+        
         document.getElementById("adsNativeBannerCode").value = adConfig.nativeBannerCode || "";
         document.getElementById("adsBanner468Code").value = adConfig.banner468Code || "";
         document.getElementById("adsPopupUrl").value = adConfig.popupAdUrl || "";
         document.getElementById("adsDuration").value = adConfig.duration || 15;
         
-        // Cargar en el sidebar también
         document.getElementById("nativeBannerCode").value = adConfig.nativeBannerCode || "";
         document.getElementById("banner468Code").value = adConfig.banner468Code || "";
         document.getElementById("popupAdUrl").value = adConfig.popupAdUrl || "";
@@ -1339,11 +1329,14 @@
       else if (item.type === "m3u8") { badge = "📡 M3U8"; badgeColor = "#7c3aed"; }
       else if (item.type === "live") { badge = "📺 LIVE"; badgeColor = "#f59e0b"; }
       
+      const yearBadge = item.year ? `<div class="card-year"><i class="far fa-calendar-alt"></i> ${escapeHtml(item.year)}</div>` : '';
+      
       html += `
         <div class="card">
-          <img class="card-img" src="${item.img || 'https://via.placeholder.com/200x180?text=No+image'}" onerror="this.src='https://via.placeholder.com/200x180?text=No+image'">
+          <img class="card-img" src="${item.img || 'https://via.placeholder.com/200x240?text=Sin+Portada'}" onerror="this.src='https://via.placeholder.com/200x240?text=Sin+Portada'">
           <div class="card-body">
             <div class="card-title">${escapeHtml(item.title)}</div>
+            ${yearBadge}
             <div class="card-source" style="background: ${badgeColor}20; color: ${badgeColor};">${badge}</div>
             <button class="btn-preview" onclick="openPreviewFromUrl('${escapeUrl(item.url)}')"><i class="fas fa-play"></i> Ver</button>
             <button class="copy-btn-card" data-url="${escapeUrl(item.url)}"><i class="fas fa-copy"></i> Copiar</button>
@@ -1534,12 +1527,17 @@
     const url = document.getElementById("inputUrl").value.trim();
     const type = document.getElementById("inputType").value;
     let img = document.getElementById("inputImg").value.trim();
+    const year = document.getElementById("inputYear").value.trim();
+    
     if (!title || !url) { Swal.fire('Error', 'Completa título y enlace', 'error'); return; }
-    if (!img) img = "https://via.placeholder.com/200x180?text=Media";
-    const success = await addToFirestore({ title, type, url, img });
+    if (!img) img = "https://via.placeholder.com/200x240?text=Sin+Portada";
+    
+    const success = await addToFirestore({ title, type, url, img, year });
     if (success) {
       document.getElementById("inputTitle").value = "";
       document.getElementById("inputUrl").value = "";
+      document.getElementById("inputYear").value = "";
+      document.getElementById("inputImg").value = "";
       Swal.fire('✅ Agregado', 'Contenido guardado', 'success', { timer: 1500 });
       closeSidebar();
     }
@@ -1576,7 +1574,7 @@
   document.getElementById("goToLoginBtn")?.addEventListener("click", () => loginUser());
   document.getElementById("goToLoginFromReportsBtn")?.addEventListener("click", () => loginUser());
 
-  // ========== TMDb SEARCH ==========
+  // ========== TMDb SEARCH (mejorado con año y poster) ==========
   const TMDB_API = "f3e064ad91ca31d7dfb85a60eed82d71";
   const TMDB_IMG = "https://image.tmdb.org/t/p/w200";
   const tmdbInput = document.getElementById("tmdbQuery");
@@ -1595,23 +1593,35 @@
       const resp = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API}&language=es&query=${encodeURIComponent(query)}`);
       const data = await resp.json();
       if (!data.results || !data.results.length) {
-        tmdbResultsDiv.innerHTML = "<div style='padding:6px'>Sin resultados</div>";
+        tmdbResultsDiv.innerHTML = "<div style='padding:8px'>Sin resultados</div>";
         tmdbResultsDiv.style.display = "block";
         return;
       }
       let html = "";
-      data.results.slice(0, 7).forEach(r => {
+      data.results.slice(0, 8).forEach(r => {
         const nombre = r.title || r.name;
         const poster = r.poster_path ? TMDB_IMG + r.poster_path : "";
-        html += `<div class="tmdb-item" data-title="${escapeHtml(nombre)}" data-poster="${poster}">🎬 ${escapeHtml(nombre)}</div>`;
+        const year = r.release_date ? r.release_date.split('-')[0] : (r.first_air_date ? r.first_air_date.split('-')[0] : '');
+        const mediaType = r.media_type === 'movie' ? '🎬 Película' : '📺 Serie';
+        html += `<div class="tmdb-item" data-title="${escapeHtml(nombre)}" data-poster="${poster}" data-year="${year}">
+                  <div style="display: flex; gap: 10px; align-items: center;">
+                    ${poster ? `<img src="${poster}" style="width: 40px; height: 60px; object-fit: cover; border-radius: 8px;">` : '<i class="fas fa-film" style="font-size: 2rem;"></i>'}
+                    <div>
+                      <strong>${escapeHtml(nombre)}</strong><br>
+                      <small>${mediaType} ${year ? `• ${year}` : ''}</small>
+                    </div>
+                  </div>
+                </div>`;
       });
       tmdbResultsDiv.innerHTML = html;
       tmdbResultsDiv.style.display = "block";
       document.querySelectorAll(".tmdb-item").forEach(el => {
         el.addEventListener("click", () => {
           document.getElementById("inputTitle").value = el.getAttribute("data-title");
-          const post = el.getAttribute("data-poster");
-          if (post) document.getElementById("inputImg").value = post;
+          const poster = el.getAttribute("data-poster");
+          const year = el.getAttribute("data-year");
+          if (poster) document.getElementById("inputImg").value = poster;
+          if (year) document.getElementById("inputYear").value = year;
           tmdbResultsDiv.style.display = "none";
           tmdbInput.value = "";
         });
@@ -1623,11 +1633,14 @@
     if (!tmdbInput.contains(e.target) && !tmdbResultsDiv.contains(e.target)) tmdbResultsDiv.style.display = "none";
   });
 
-  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&'; if(m==='<') return '<'; if(m==='>') return '>'; return m;}); }
+  function escapeHtml(str) { 
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); 
+  }
   function escapeUrl(url) { return url.replace(/'/g, "\\'"); }
 
-  document.getElementById("telegramLink").href = "https://t.me/tu_usuario";
-  document.getElementById("webLink").href = "https://polosurtv.com";
+  document.getElementById("telegramLink").href = "https://t.me/+zUBuNfBjwlczOGZh";
+  document.getElementById("webLink").href = "https://polosurtv.top";
 
   // ========== EVENTOS ==========
   loginBtn.addEventListener("click", loginUser);
