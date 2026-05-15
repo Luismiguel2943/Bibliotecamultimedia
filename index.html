@@ -355,6 +355,48 @@
       text-align: center;
     }
 
+    /* Panel de exportación */
+    .export-panel {
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      border: 1px solid #334155;
+    }
+    .export-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .export-btn {
+      background: #0f172a;
+      border: 1px solid #f59e0b;
+      color: #f59e0b;
+      padding: 6px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: bold;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .export-btn:hover {
+      background: #f59e0b;
+      color: #0f172a;
+      transform: scale(1.02);
+    }
+    .export-info {
+      font-size: 0.7rem;
+      color: #94a3b8;
+    }
+
     /* Pestañas */
     .tabs-container {
       background: #1e293b;
@@ -387,6 +429,15 @@
     .tab-btn i { font-size: 1.1rem; }
     .tab-btn:hover { background: #1e293b; color: #f59e0b; }
     .tab-btn.active { color: #f59e0b; border-bottom: 3px solid #f59e0b; background: #1e293b; }
+    .tab-count {
+      background: #f59e0b;
+      color: #0f172a;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
     .tab-content { padding: 1rem; }
     .tab-pane { display: none; animation: fadeIn 0.3s ease; }
     .tab-pane.active { display: block; }
@@ -714,6 +765,8 @@
       .card-title { font-size: 0.7rem; -webkit-line-clamp: 2; min-height: 32px; }
       .card-year { font-size: 0.6rem; }
       .player-container-global { aspect-ratio: 16 / 6; }
+      .export-buttons { width: 100%; justify-content: center; }
+      .export-info { width: 100%; text-align: center; }
     }
     @media (max-width: 480px) {
       .card { min-width: 120px; }
@@ -852,35 +905,51 @@
 <!-- Contenido principal con PESTAÑAS HORIZONTALES -->
 <div class="tabs-container">
   <div class="tabs-header" id="tabsHeader">
-    <button class="tab-btn active" data-tab="drive">
+    <button class="tab-btn active" data-tab="drive" id="tabBtnDrive">
       <i class="fab fa-google-drive"></i> Google Drive
+      <span class="tab-count" id="countDrive">0</span>
     </button>
-    <button class="tab-btn" data-tab="mp4">
+    <button class="tab-btn" data-tab="mp4" id="tabBtnMp4">
       <i class="fas fa-video"></i> MP4
+      <span class="tab-count" id="countMp4">0</span>
     </button>
-    <button class="tab-btn" data-tab="m3u8">
+    <button class="tab-btn" data-tab="m3u8" id="tabBtnM3u8">
       <i class="fas fa-stream"></i> M3U8
+      <span class="tab-count" id="countM3u8">0</span>
     </button>
-    <button class="tab-btn" data-tab="live">
+    <button class="tab-btn" data-tab="live" id="tabBtnLive">
       <i class="fas fa-satellite-dish"></i> Canales LIVE
+      <span class="tab-count" id="countLive">0</span>
     </button>
-    <button class="tab-btn" data-tab="test">
+    <button class="tab-btn" data-tab="test" id="tabBtnTest">
       <i class="fas fa-vial"></i> Test de Enlace
+      <span class="tab-count" id="countTest" style="background:#64748b;">0</span>
     </button>
     <button class="tab-btn admin-tab" data-tab="reports" id="reportsTabBtn" style="display: none;">
       <i class="fas fa-flag"></i> Reportes
+      <span class="tab-count" id="countReports">0</span>
     </button>
     <button class="tab-btn admin-tab" data-tab="requests" id="requestsTabBtn" style="display: none;">
       <i class="fas fa-clipboard-list"></i> Solicitudes
+      <span class="tab-count" id="countRequests">0</span>
     </button>
     <button class="tab-btn admin-tab" data-tab="ads" id="adsTabBtn" style="display: none;">
       <i class="fas fa-ad"></i> Anuncios
+      <span class="tab-count" id="countAds" style="background:#64748b;">0</span>
     </button>
   </div>
   
   <div class="tab-content">
     <!-- Pestaña Google Drive -->
     <div class="tab-pane active" id="tab-drive">
+      <div class="export-panel">
+        <div class="export-buttons">
+          <button class="export-btn" data-section="drive" data-format="json"><i class="fas fa-code"></i> JSON</button>
+          <button class="export-btn" data-section="drive" data-format="csv"><i class="fas fa-file-excel"></i> CSV</button>
+          <button class="export-btn" data-section="drive" data-format="txt"><i class="fas fa-file-alt"></i> TXT</button>
+        </div>
+        <div class="export-info"><i class="fas fa-download"></i> Exportar datos de Google Drive</div>
+      </div>
       <div class="grid-cards" id="driveContainer"></div>
       <!-- Reproductor específico para esta pestaña -->
       <div class="player-section" id="playerDrive">
@@ -895,6 +964,14 @@
     
     <!-- Pestaña MP4 -->
     <div class="tab-pane" id="tab-mp4">
+      <div class="export-panel">
+        <div class="export-buttons">
+          <button class="export-btn" data-section="mp4" data-format="json"><i class="fas fa-code"></i> JSON</button>
+          <button class="export-btn" data-section="mp4" data-format="csv"><i class="fas fa-file-excel"></i> CSV</button>
+          <button class="export-btn" data-section="mp4" data-format="txt"><i class="fas fa-file-alt"></i> TXT</button>
+        </div>
+        <div class="export-info"><i class="fas fa-download"></i> Exportar datos de MP4</div>
+      </div>
       <div class="grid-cards" id="mp4Container"></div>
       <div class="player-section" id="playerMp4">
         <div class="player-title">
@@ -908,6 +985,14 @@
     
     <!-- Pestaña M3U8 -->
     <div class="tab-pane" id="tab-m3u8">
+      <div class="export-panel">
+        <div class="export-buttons">
+          <button class="export-btn" data-section="m3u8" data-format="json"><i class="fas fa-code"></i> JSON</button>
+          <button class="export-btn" data-section="m3u8" data-format="csv"><i class="fas fa-file-excel"></i> CSV</button>
+          <button class="export-btn" data-section="m3u8" data-format="txt"><i class="fas fa-file-alt"></i> TXT</button>
+        </div>
+        <div class="export-info"><i class="fas fa-download"></i> Exportar datos de M3U8/HLS</div>
+      </div>
       <div class="grid-cards" id="m3u8Container"></div>
       <div class="player-section" id="playerM3u8">
         <div class="player-title">
@@ -921,6 +1006,14 @@
     
     <!-- Pestaña Canales LIVE -->
     <div class="tab-pane" id="tab-live">
+      <div class="export-panel">
+        <div class="export-buttons">
+          <button class="export-btn" data-section="live" data-format="json"><i class="fas fa-code"></i> JSON</button>
+          <button class="export-btn" data-section="live" data-format="csv"><i class="fas fa-file-excel"></i> CSV</button>
+          <button class="export-btn" data-section="live" data-format="txt"><i class="fas fa-file-alt"></i> TXT</button>
+        </div>
+        <div class="export-info"><i class="fas fa-download"></i> Exportar datos de Canales LIVE</div>
+      </div>
       <div class="grid-cards" id="liveContainer"></div>
       <div class="player-section" id="playerLive">
         <div class="player-title">
@@ -1062,7 +1155,7 @@
   let itemsList = [];
   let reportsList = [];
   let requestsList = [];
-  let userApprovedRequests = []; // IDs de solicitudes aprobadas para el usuario actual
+  let userApprovedRequests = [];
   let adConfig = { 
     duration: 15,
     nativeBannerCode: "",
@@ -1177,6 +1270,138 @@
     updateUrlGroups();
   }
 
+  // ========== FUNCIONES DE EXPORTACIÓN ==========
+  function exportData(sectionType, format) {
+    // Filtrar items por tipo
+    let itemsToExport = itemsList.filter(item => item.type === sectionType);
+    
+    if (itemsToExport.length === 0) {
+      Swal.fire('Sin datos', `No hay elementos para exportar en esta sección`, 'info');
+      return;
+    }
+    
+    // Preparar datos para exportación (limpiar campos no deseados)
+    const exportItems = itemsToExport.map(item => {
+      const cleanItem = {
+        id: item.id || '',
+        title: item.title || '',
+        year: item.year || '',
+        type: item.type || '',
+        img: item.img || '',
+        urls: Array.isArray(item.urls) ? item.urls : (item.url ? [item.url] : [])
+      };
+      if (item.createdAt) cleanItem.createdAt = item.createdAt;
+      if (item.createdBy) cleanItem.createdBy = item.createdBy;
+      return cleanItem;
+    });
+    
+    let fileContent = '';
+    let fileExtension = '';
+    let mimeType = '';
+    
+    switch(format) {
+      case 'json':
+        fileContent = JSON.stringify(exportItems, null, 2);
+        fileExtension = 'json';
+        mimeType = 'application/json';
+        break;
+      case 'csv':
+        // Cabeceras CSV
+        const headers = ['ID', 'Título', 'Año', 'Tipo', 'URLs (separadas por |)', 'Imagen URL'];
+        const rows = exportItems.map(item => {
+          const urlsStr = Array.isArray(item.urls) ? item.urls.join(' | ') : '';
+          return [
+            `"${(item.id || '').replace(/"/g, '""')}"`,
+            `"${(item.title || '').replace(/"/g, '""')}"`,
+            `"${(item.year || '').replace(/"/g, '""')}"`,
+            `"${(item.type || '').replace(/"/g, '""')}"`,
+            `"${urlsStr.replace(/"/g, '""')}"`,
+            `"${(item.img || '').replace(/"/g, '""')}"`
+          ].join(',');
+        });
+        fileContent = [headers.join(','), ...rows].join('\n');
+        fileExtension = 'csv';
+        mimeType = 'text/csv';
+        break;
+      case 'txt':
+        // Formato texto legible
+        let txtLines = [];
+        txtLines.push('='.repeat(80));
+        txtLines.push(`EXPORTACIÓN DE DATOS - POLOSURTV`);
+        txtLines.push(`Sección: ${sectionType.toUpperCase()}`);
+        txtLines.push(`Fecha: ${new Date().toLocaleString()}`);
+        txtLines.push(`Total de elementos: ${exportItems.length}`);
+        txtLines.push('='.repeat(80));
+        txtLines.push('');
+        
+        exportItems.forEach((item, idx) => {
+          txtLines.push(`[${idx + 1}] ${item.title || 'Sin título'}`);
+          txtLines.push(`  ID: ${item.id || 'N/A'}`);
+          txtLines.push(`  Año: ${item.year || 'No especificado'}`);
+          txtLines.push(`  Tipo: ${item.type || 'N/A'}`);
+          if (Array.isArray(item.urls) && item.urls.length > 0) {
+            txtLines.push(`  URLs (${item.urls.length} servidor(es)):`);
+            item.urls.forEach((url, urlIdx) => {
+              txtLines.push(`    Servidor ${urlIdx + 1}: ${url}`);
+            });
+          } else {
+            txtLines.push(`  URLs: No disponibles`);
+          }
+          txtLines.push(`  Imagen: ${item.img || 'Sin imagen'}`);
+          if (item.createdBy) txtLines.push(`  Agregado por: ${item.createdBy}`);
+          txtLines.push('');
+          txtLines.push('-'.repeat(60));
+          txtLines.push('');
+        });
+        
+        fileContent = txtLines.join('\n');
+        fileExtension = 'txt';
+        mimeType = 'text/plain';
+        break;
+      default:
+        return;
+    }
+    
+    // Crear y descargar archivo
+    const blob = new Blob([fileContent], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `polosurtv_${sectionType}_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.${fileExtension}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    Swal.fire({
+      title: '✅ Exportación completada',
+      text: `Se han exportado ${exportItems.length} elementos en formato ${format.toUpperCase()}`,
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false
+    });
+  }
+
+  // ========== FUNCIONES DE ACTUALIZAR CONTADORES ==========
+  function updateTabCounts() {
+    const driveCount = itemsList.filter(i => i.type === "drive").length;
+    const mp4Count = itemsList.filter(i => i.type === "mp4").length;
+    const m3u8Count = itemsList.filter(i => i.type === "m3u8").length;
+    const liveCount = itemsList.filter(i => i.type === "live").length;
+    
+    document.getElementById("countDrive").textContent = driveCount;
+    document.getElementById("countMp4").textContent = mp4Count;
+    document.getElementById("countM3u8").textContent = m3u8Count;
+    document.getElementById("countLive").textContent = liveCount;
+    document.getElementById("countTest").textContent = " ";
+    
+    if (isAdmin) {
+      document.getElementById("countReports").textContent = reportsList.length;
+      document.getElementById("countRequests").textContent = requestsList.filter(r => r.status === "pending").length;
+      document.getElementById("countAds").textContent = " ";
+    }
+  }
+
   // ========== FUNCIONES DE SOLICITUDES DE ACCESO ==========
   
   async function checkUserApprovalStatus() {
@@ -1277,7 +1502,6 @@
       return;
     }
     
-    // Verificar si el usuario tiene solicitud aprobada
     await checkUserApprovalStatus();
     if (userApprovedRequests.length > 0) {
       await navigator.clipboard.writeText(url);
@@ -1285,7 +1509,6 @@
       return;
     }
     
-    // Si no tiene aprobación, mostrar modal de solicitud
     await showAccessRequestModal(url, contentTitle);
   }
   
@@ -1297,6 +1520,7 @@
       requestsList = [];
       snapshot.forEach(doc => requestsList.push({ id: doc.id, ...doc.data() }));
       renderRequestsList();
+      updateTabCounts();
     } catch (error) { console.error(error); }
   }
   
@@ -1395,6 +1619,7 @@
       reportsList = [];
       snapshot.forEach(doc => reportsList.push({ id: doc.id, ...doc.data() }));
       renderReportsList();
+      updateTabCounts();
     } catch (error) { console.error(error); }
   }
 
@@ -1431,24 +1656,19 @@
 
   // ========== REPRODUCTOR UNIFICADO POR PESTAÑA ==========
   function initPlayers() {
-    // Drive
     players.drive.video = document.getElementById("videoDrive");
     players.drive.iframe = document.getElementById("iframeDrive");
     players.drive.container = document.getElementById("playerContainerDrive");
     players.drive.status = document.getElementById("statusDrive");
-    // Mp4
     players.mp4.video = document.getElementById("videoMp4");
     players.mp4.iframe = document.getElementById("iframeMp4");
     players.mp4.status = document.getElementById("statusMp4");
-    // M3u8
     players.m3u8.video = document.getElementById("videoM3u8");
     players.m3u8.iframe = document.getElementById("iframeM3u8");
     players.m3u8.status = document.getElementById("statusM3u8");
-    // Live
     players.live.video = document.getElementById("videoLive");
     players.live.iframe = document.getElementById("iframeLive");
     players.live.status = document.getElementById("statusLive");
-    // Test global
     players.test.video = document.getElementById("globalTestVideo");
     players.test.iframe = document.getElementById("globalTestIframe");
     players.test.status = document.getElementById("globalTestStatus");
@@ -1474,13 +1694,11 @@
   function playInPlayer(playerKey, url) {
     const p = players[playerKey];
     if (!p) return;
-    // Ocultar y resetear
     if (p.video) { p.video.style.display = "none"; p.video.pause(); p.video.src = ""; }
     if (p.iframe) { p.iframe.style.display = "none"; p.iframe.src = "about:blank"; }
     destroyHls(playerKey);
     
     const urlLow = url.toLowerCase();
-    // Drive
     if (urlLow.includes("drive.google.com")) {
       let embedUrl = url;
       const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
@@ -1490,7 +1708,6 @@
       if (p.status) p.status.innerText = "✅ Reproduciendo Google Drive";
       return;
     }
-    // M3U8
     if (urlLow.includes(".m3u8") || urlLow.includes("m3u8")) {
       if (Hls.isSupported() && p.video) {
         p.video.style.display = "block";
@@ -1511,7 +1728,6 @@
       }
       return;
     }
-    // MP4
     if (urlLow.includes(".mp4")) {
       if (p.video) {
         p.video.style.display = "block";
@@ -1521,7 +1737,6 @@
       }
       return;
     }
-    // Otros (iframe)
     if (p.iframe) {
       p.iframe.style.display = "block";
       p.iframe.src = url;
@@ -1600,6 +1815,7 @@
       itemsList = [];
       snapshot.forEach(doc => itemsList.push({ id: doc.id, ...doc.data() }));
       renderAllSections();
+      updateTabCounts();
       showLoading(false);
     } catch (error) { console.error(error); showLoading(false); }
   }
@@ -1612,6 +1828,7 @@
       item.id = docRef.id;
       itemsList.unshift(item);
       renderAllSections();
+      updateTabCounts();
       showLoading(false);
       return true;
     } catch (error) { showLoading(false); Swal.fire('Error', 'No se pudo guardar', 'error'); return false; }
@@ -1624,6 +1841,7 @@
       await db.collection(COLLECTION_NAME).doc(id).delete();
       itemsList = itemsList.filter(i => i.id !== id);
       renderAllSections();
+      updateTabCounts();
       showLoading(false);
       return true;
     } catch (error) { showLoading(false); Swal.fire('Error', 'No se pudo eliminar', 'error'); return false; }
@@ -1658,14 +1876,12 @@
       html += `<div class="card"><img class="card-img" src="${item.img || 'https://via.placeholder.com/200x240'}" onerror="this.src='https://via.placeholder.com/200x240'"><div class="card-body"><div class="card-title">${escapeHtml(item.title)}</div>${yearBadge}<div class="card-source" style="background:${badgeColor}20; color:${badgeColor};">${badge}</div>${serversHtml}<button class="btn-preview" data-urls='${JSON.stringify(urls)}' data-player="${playerKey}"><i class="fas fa-play"></i> Ver</button><button class="report-btn" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-urls='${JSON.stringify(urls)}'><i class="fas fa-flag"></i> Reportar</button><button class="delete-btn" data-id="${item.id}" ${!isAdmin ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isAdmin ? 'Eliminar' : 'Admin'}</button></div></div>`;
     }
     container.innerHTML = html;
-    // Eventos copiar con control de acceso
     container.querySelectorAll('.server-btn').forEach(btn => btn.addEventListener("click", async (e) => { 
       e.stopPropagation(); 
       const url = btn.getAttribute("data-url"); 
       const title = btn.getAttribute("data-title");
       if (url) await copyWithAccessControl(url, title); 
     }));
-    // Eventos Ver (reproducir en su player)
     container.querySelectorAll('.btn-preview').forEach(btn => btn.addEventListener("click", (e) => { 
       e.preventDefault(); 
       const player = btn.getAttribute("data-player"); 
@@ -1676,7 +1892,6 @@
         else Swal.fire('Error', 'Sin URL', 'error'); 
       } catch(e) { Swal.fire('Error', 'URL inválida', 'error'); } 
     }));
-    // Eventos reportar
     container.querySelectorAll('.report-btn').forEach(btn => btn.addEventListener("click", (e) => { 
       const id = btn.dataset.id; 
       const title = btn.dataset.title; 
@@ -1685,7 +1900,6 @@
       try { const u = JSON.parse(urlsAttr); if(u.length) firstUrl = u[0]; } catch(e){} 
       showReportModal(id, title, firstUrl); 
     }));
-    // Eliminar
     container.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener("click", async (e) => { 
       if (!isAdmin) return; 
       const id = btn.dataset.id; 
@@ -1740,13 +1954,24 @@
     }
   });
 
-  // Guardar ads
   document.getElementById("saveAdsConfigBtn")?.addEventListener("click", async () => { if(isAdmin){ const config = { nativeBannerCode: document.getElementById("adsNativeBannerCode").value, banner468Code: document.getElementById("adsBanner468Code").value, popupAdUrl: document.getElementById("adsPopupUrl").value, duration: parseInt(document.getElementById("adsDuration").value) || 15 }; await saveAdConfig(config); } });
   document.getElementById("btnSaveAdConfig")?.addEventListener("click", async () => { if(isAdmin){ const config = { nativeBannerCode: document.getElementById("nativeBannerCode").value, banner468Code: document.getElementById("banner468Code").value, popupAdUrl: document.getElementById("popupAdUrl").value, duration: parseInt(document.getElementById("adDuration").value) || 15 }; await saveAdConfig(config); } });
   document.getElementById("goToLoginBtn")?.addEventListener("click", loginUser);
   document.getElementById("goToLoginFromReportsBtn")?.addEventListener("click", loginUser);
   document.getElementById("goToLoginFromRequestsBtn")?.addEventListener("click", loginUser);
-
+  
+  // ========== EXPORT BUTTONS ==========
+  function setupExportButtons() {
+    const exportBtns = document.querySelectorAll('.export-btn');
+    exportBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const section = btn.getAttribute('data-section');
+        const format = btn.getAttribute('data-format');
+        exportData(section, format);
+      });
+    });
+  }
+  
   // ========== TMDb SEARCH ==========
   const TMDB_API = "f3e064ad91ca31d7dfb85a60eed82d71";
   const TMDB_IMG = "https://image.tmdb.org/t/p/w200";
@@ -1794,6 +2019,7 @@
     updateUIForUser();
     await loadFromFirestore();
     setupTabs();
+    setupExportButtons();
     initPlayers();
   });
 </script>
