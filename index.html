@@ -221,24 +221,139 @@
     .tmdb-item { padding: 8px; border-bottom: 1px solid #334155; cursor: pointer; font-size: 0.75rem; transition: 0.2s; }
     .tmdb-item:hover { background: #334155; color: #f59e0b; }
 
-    /* Reproductor de prueba */
-    .preview-panel {
+    /* URLs múltiples */
+    .urls-container {
       background: #1e293b;
       border-radius: 16px;
-      padding: 0.8rem;
-      margin: 0.8rem 0;
+      padding: 12px;
+      margin: 12px 0;
     }
-    .test-url-input { display: flex; gap: 6px; margin: 8px 0; }
-    .test-url-input input { flex: 1; padding: 6px; font-size: 0.7rem; }
-    .player-container {
-      background: #000;
+    .url-group {
+      background: #0f172a;
       border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 16 / 9;
-      margin-top: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-left: 3px solid #f59e0b;
     }
-    video, iframe { width: 100%; height: 100%; border: none; }
-    .status-msg { font-size: 0.6rem; margin-top: 6px; color: #94a3b8; }
+    .url-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .url-header label {
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: #f59e0b;
+      margin: 0;
+    }
+    .remove-url-btn {
+      background: #dc2626;
+      border: none;
+      color: white;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+    .add-url-btn {
+      background: #22c55e;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      margin-top: 8px;
+      width: auto;
+    }
+
+    /* Reproductor mejorado - MÁS PEQUEÑO */
+    .player-section {
+      margin-top: 1.5rem;
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 1rem;
+      border: 1px solid #334155;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .player-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f59e0b;
+    }
+    .player-title-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .player-title-left i { font-size: 1.4rem; color: #f59e0b; }
+    .player-title-left span { font-weight: bold; font-size: 1rem; }
+    .close-player-btn {
+      background: #ef4444;
+      border: none;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .close-player-btn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+    .player-container-global {
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 16 / 7;
+      width: 100%;
+    }
+    .player-container-global video, .player-container-global iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .test-url-panel {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .test-url-panel input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 40px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: white;
+      font-size: 0.8rem;
+    }
+    .test-url-panel button {
+      background: #f59e0b;
+      border: none;
+      padding: 0 20px;
+      border-radius: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .test-url-panel button:hover { background: #d97706; transform: scale(1.02); }
+    .player-status-msg {
+      font-size: 0.7rem;
+      margin-top: 8px;
+      color: #94a3b8;
+      text-align: center;
+    }
 
     /* Pestañas */
     .tabs-container {
@@ -272,7 +387,7 @@
     .tab-btn i { font-size: 1.1rem; }
     .tab-btn:hover { background: #1e293b; color: #f59e0b; }
     .tab-btn.active { color: #f59e0b; border-bottom: 3px solid #f59e0b; background: #1e293b; }
-    .tab-content { padding: 1rem; min-height: 400px; }
+    .tab-content { padding: 1rem; }
     .tab-pane { display: none; animation: fadeIn 0.3s ease; }
     .tab-pane.active { display: block; }
     @keyframes fadeIn {
@@ -280,7 +395,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Tarjetas mejoradas */
+    /* Tarjetas mejoradas - MEJOR ORGANIZACIÓN */
     .grid-cards {
       display: flex;
       flex-wrap: wrap;
@@ -291,7 +406,7 @@
       background: #0f172a;
       border-radius: 16px;
       width: calc(20% - 0.8rem);
-      min-width: 170px;
+      min-width: 200px;
       overflow: hidden;
       border: 1px solid #334155;
       transition: all 0.3s ease;
@@ -300,7 +415,7 @@
     .card:hover { transform: translateY(-5px); border-color: #f59e0b; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
     .card-img {
       width: 100%;
-      height: 240px;
+      height: 220px;
       object-fit: cover;
       transition: transform 0.3s ease;
     }
@@ -335,7 +450,25 @@
       border-radius: 20px;
       margin: 4px 0;
     }
-    .btn-preview, .copy-btn-card, .report-btn, .delete-btn {
+    .servers-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 8px 0;
+    }
+    .server-btn {
+      background: #2563eb;
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      cursor: pointer;
+      flex: 1;
+      min-width: 50px;
+    }
+    .server-btn:hover { background: #1d4ed8; }
+    .btn-preview, .report-btn, .delete-btn {
       border: none;
       border-radius: 40px;
       padding: 6px;
@@ -348,8 +481,6 @@
     }
     .btn-preview { background: #2563eb; color: white; }
     .btn-preview:hover { background: #1d4ed8; transform: scale(1.02); }
-    .copy-btn-card { background: #475569; color: white; }
-    .copy-btn-card:hover { background: #334155; transform: scale(1.02); }
     .delete-btn { background: #dc2626; color: white; }
     .delete-btn:disabled { background: #7f8c8d; cursor: not-allowed; opacity: 0.6; }
     .delete-btn:hover:not(:disabled) { background: #b91c1c; transform: scale(1.02); }
@@ -363,8 +494,8 @@
       border-radius: 20px;
     }
 
-    /* Modal de espera para copiar */
-    .waiting-modal {
+    /* Modal de solicitud */
+    .request-modal {
       position: fixed;
       top: 0;
       left: 0;
@@ -378,7 +509,7 @@
       flex-direction: column;
       backdrop-filter: blur(10px);
     }
-    .waiting-modal-content {
+    .request-modal-content {
       background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
       border-radius: 28px;
       padding: 2rem;
@@ -393,50 +524,45 @@
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .waiting-modal-header { margin-bottom: 1rem; }
-    .waiting-modal-header h2 { color: #f59e0b; font-size: 1.5rem; }
-    .waiting-timer {
-      font-size: 4rem;
-      font-weight: bold;
-      color: #f59e0b;
-      margin: 1rem 0;
-      font-family: monospace;
-    }
-    .waiting-progress {
+    .request-modal-header { margin-bottom: 1rem; }
+    .request-modal-header h2 { color: #f59e0b; font-size: 1.5rem; }
+    .request-input {
       width: 100%;
-      height: 8px;
-      background: #334155;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 1rem 0;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 16px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: white;
+      font-size: 0.9rem;
     }
-    .waiting-progress-bar {
-      height: 100%;
-      background: #f59e0b;
-      width: 0%;
-      transition: width 0.3s linear;
+    .request-textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 16px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: white;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 80px;
     }
-    .waiting-message { color: #94a3b8; margin-bottom: 1rem; }
-    .copy-unlock-btn {
-      background: #475569;
+    .request-submit-btn {
+      background: #22c55e;
       color: white;
       border: none;
       padding: 12px 24px;
       border-radius: 40px;
       font-weight: bold;
       font-size: 1rem;
-      cursor: not-allowed;
+      cursor: pointer;
       width: 100%;
-      opacity: 0.5;
+      margin-top: 10px;
       transition: 0.2s;
     }
-    .copy-unlock-btn.active {
-      opacity: 1;
-      background: #22c55e;
-      cursor: pointer;
-    }
-    .copy-unlock-btn.active:hover { background: #16a34a; transform: scale(1.02); }
-    .close-waiting-btn {
+    .request-submit-btn:hover { background: #16a34a; transform: scale(1.02); }
+    .request-close-btn {
       position: absolute;
       top: 20px;
       right: 20px;
@@ -449,19 +575,8 @@
       justify-content: center;
       cursor: pointer;
       color: white;
-      opacity: 0;
-      transition: 0.2s;
     }
-    .close-waiting-btn.active { opacity: 1; cursor: pointer; }
-    .close-waiting-btn.active:hover { background: #dc2626; transform: scale(1.05); }
-    .ad-opened-badge {
-      background: #22c55e20;
-      color: #22c55e;
-      padding: 8px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      margin-top: 1rem;
-    }
+    .request-close-btn:hover { background: #dc2626; transform: scale(1.05); }
 
     /* BANNER INFERIOR (468x60) */
     .bottom-banner {
@@ -515,6 +630,44 @@
       font-size: 0.65rem;
     }
 
+    /* Panel de solicitudes */
+    .request-item {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+      border-left: 3px solid #f59e0b;
+    }
+    .request-email { font-weight: bold; color: #f59e0b; }
+    .request-reason { font-size: 0.8rem; margin: 5px 0; color: #94a3b8; }
+    .request-meta {
+      font-size: 0.65rem;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .approve-request-btn {
+      background: #22c55e;
+      border: none;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.65rem;
+    }
+    .reject-request-btn {
+      background: #dc2626;
+      border: none;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.65rem;
+    }
+
     .loading-overlay {
       position: fixed;
       top: 0;
@@ -556,20 +709,21 @@
     @media (max-width: 768px) {
       .sidebar { width: 100%; left: -100%; }
       .tab-btn { padding: 8px 12px; font-size: 0.7rem; min-width: 70px; }
-      .card { width: calc(33.333% - 0.7rem); min-width: 110px; }
+      .card { width: calc(33.333% - 0.7rem); min-width: 140px; }
       .card-img { height: 160px; }
       .card-title { font-size: 0.7rem; -webkit-line-clamp: 2; min-height: 32px; }
       .card-year { font-size: 0.6rem; }
-      .waiting-modal-content { padding: 1rem; width: 95%; }
-      .waiting-timer { font-size: 3rem; }
+      .player-container-global { aspect-ratio: 16 / 6; }
     }
     @media (max-width: 480px) {
-      .card { min-width: 100px; }
+      .card { min-width: 120px; }
       .card-img { height: 140px; }
       .tab-btn { padding: 6px 8px; font-size: 0.6rem; min-width: 55px; }
+      .player-container-global { aspect-ratio: 16 / 5; }
     }
     @media (min-width: 1200px) {
       .card { width: calc(16.666% - 0.85rem); }
+      .card-img { height: 220px; }
     }
   </style>
 </head>
@@ -649,8 +803,20 @@
     <option value="live">📺 Canal en Vivo</option>
   </select>
   
-  <label>Enlace *</label>
-  <input type="text" id="inputUrl" placeholder="URL del recurso">
+  <!-- URLs múltiples hasta 3 servidores -->
+  <div class="urls-container">
+    <label><i class="fas fa-server"></i> Servidores (máx 3)</label>
+    <div id="urlsList">
+      <div class="url-group" data-url-index="0">
+        <div class="url-header">
+          <label>Servidor 1</label>
+          <button type="button" class="remove-url-btn" onclick="removeUrlGroup(0)" style="display:none;">✕</button>
+        </div>
+        <input type="text" class="server-url" placeholder="URL del servidor 1" value="">
+      </div>
+    </div>
+    <button type="button" class="add-url-btn" id="addUrlBtn"><i class="fas fa-plus"></i> Agregar servidor</button>
+  </div>
   
   <!-- Sección de monetización (SOLO ADMIN) -->
   <div id="monetizationSection" style="display: none;">
@@ -671,18 +837,6 @@
       
       <button id="btnSaveAdConfig" style="background: #22c55e;"><i class="fas fa-save"></i> Guardar</button>
     </div>
-  </div>
-
-  <div class="preview-panel">
-    <div class="test-url-input">
-      <input type="text" id="testUrl" placeholder="Probar enlace">
-      <button id="btnTestUrl" style="width: auto; padding: 0 12px;">Test</button>
-    </div>
-    <div class="player-container">
-      <video id="testVideo" controls style="display:none;"></video>
-      <iframe id="testIframe" style="display:none;" allowfullscreen></iframe>
-    </div>
-    <div class="status-msg" id="testStatus">🔗 Prueba antes de guardar</div>
   </div>
 
   <div class="tmdb-search">
@@ -710,8 +864,14 @@
     <button class="tab-btn" data-tab="live">
       <i class="fas fa-satellite-dish"></i> Canales LIVE
     </button>
+    <button class="tab-btn" data-tab="test">
+      <i class="fas fa-vial"></i> Test de Enlace
+    </button>
     <button class="tab-btn admin-tab" data-tab="reports" id="reportsTabBtn" style="display: none;">
       <i class="fas fa-flag"></i> Reportes
+    </button>
+    <button class="tab-btn admin-tab" data-tab="requests" id="requestsTabBtn" style="display: none;">
+      <i class="fas fa-clipboard-list"></i> Solicitudes
     </button>
     <button class="tab-btn admin-tab" data-tab="ads" id="adsTabBtn" style="display: none;">
       <i class="fas fa-ad"></i> Anuncios
@@ -722,21 +882,70 @@
     <!-- Pestaña Google Drive -->
     <div class="tab-pane active" id="tab-drive">
       <div class="grid-cards" id="driveContainer"></div>
+      <!-- Reproductor específico para esta pestaña -->
+      <div class="player-section" id="playerDrive">
+        <div class="player-title">
+          <div class="player-title-left"><i class="fas fa-play-circle"></i><span>Reproductor - Google Drive</span></div>
+          <button class="close-player-btn" onclick="closePlayer('drive')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="player-container-global" id="playerContainerDrive"><video id="videoDrive" controls style="width:100%;height:100%;display:none;"></video><iframe id="iframeDrive" style="width:100%;height:100%;display:none;" allowfullscreen></iframe></div>
+        <div class="player-status-msg" id="statusDrive">🔗 Haz clic en "Ver" en cualquier tarjeta para reproducir.</div>
+      </div>
     </div>
     
     <!-- Pestaña MP4 -->
     <div class="tab-pane" id="tab-mp4">
       <div class="grid-cards" id="mp4Container"></div>
+      <div class="player-section" id="playerMp4">
+        <div class="player-title">
+          <div class="player-title-left"><i class="fas fa-play-circle"></i><span>Reproductor - MP4</span></div>
+          <button class="close-player-btn" onclick="closePlayer('mp4')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="player-container-global" id="playerContainerMp4"><video id="videoMp4" controls style="width:100%;height:100%;display:none;"></video><iframe id="iframeMp4" style="width:100%;height:100%;display:none;" allowfullscreen></iframe></div>
+        <div class="player-status-msg" id="statusMp4">🔗 Haz clic en "Ver" en cualquier tarjeta para reproducir.</div>
+      </div>
     </div>
     
     <!-- Pestaña M3U8 -->
     <div class="tab-pane" id="tab-m3u8">
       <div class="grid-cards" id="m3u8Container"></div>
+      <div class="player-section" id="playerM3u8">
+        <div class="player-title">
+          <div class="player-title-left"><i class="fas fa-play-circle"></i><span>Reproductor - M3U8 / HLS</span></div>
+          <button class="close-player-btn" onclick="closePlayer('m3u8')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="player-container-global" id="playerContainerM3u8"><video id="videoM3u8" controls style="width:100%;height:100%;display:none;"></video><iframe id="iframeM3u8" style="width:100%;height:100%;display:none;" allowfullscreen></iframe></div>
+        <div class="player-status-msg" id="statusM3u8">🔗 Haz clic en "Ver" en cualquier tarjeta para reproducir.</div>
+      </div>
     </div>
     
     <!-- Pestaña Canales LIVE -->
     <div class="tab-pane" id="tab-live">
       <div class="grid-cards" id="liveContainer"></div>
+      <div class="player-section" id="playerLive">
+        <div class="player-title">
+          <div class="player-title-left"><i class="fas fa-play-circle"></i><span>Reproductor - Canales LIVE</span></div>
+          <button class="close-player-btn" onclick="closePlayer('live')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="player-container-global" id="playerContainerLive"><video id="videoLive" controls style="width:100%;height:100%;display:none;"></video><iframe id="iframeLive" style="width:100%;height:100%;display:none;" allowfullscreen></iframe></div>
+        <div class="player-status-msg" id="statusLive">🔗 Haz clic en "Ver" en cualquier tarjeta para reproducir.</div>
+      </div>
+    </div>
+
+    <!-- Pestaña TEST DE ENLACE -->
+    <div class="tab-pane" id="tab-test">
+      <div class="player-section" style="margin-top:0;">
+        <div class="player-title">
+          <div class="player-title-left"><i class="fas fa-vial"></i><span>Test de Enlace Manual</span></div>
+          <button class="close-player-btn" onclick="closePlayer('test')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="test-url-panel">
+          <input type="text" id="globalTestUrl" placeholder="https://ejemplo.com/video.mp4 o .m3u8 o drive.google.com/...">
+          <button id="globalTestPlayBtn"><i class="fas fa-play"></i> Probar</button>
+        </div>
+        <div class="player-container-global" id="globalTestPlayerContainer"><video id="globalTestVideo" controls style="width:100%;height:100%;display:none;"></video><iframe id="globalTestIframe" style="width:100%;height:100%;display:none;" allowfullscreen></iframe></div>
+        <div class="player-status-msg" id="globalTestStatus">📎 Ingresa una URL y presiona Probar.</div>
+      </div>
     </div>
     
     <!-- Pestaña Reportes (SOLO ADMIN) -->
@@ -749,6 +958,21 @@
         <i class="fas fa-lock" style="font-size: 3rem; color: #f59e0b;"></i>
         <p style="margin-top: 1rem;">Solo el administrador puede ver los reportes</p>
         <button id="goToLoginFromReportsBtn" style="background: #f59e0b; border: none; color: #0f172a; padding: 10px 20px; border-radius: 40px; margin-top: 1rem; cursor: pointer;">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión como Admin
+        </button>
+      </div>
+    </div>
+    
+    <!-- Pestaña Solicitudes (SOLO ADMIN) -->
+    <div class="tab-pane" id="tab-requests">
+      <div id="adminRequestsPanel" style="display: none;">
+        <h3 style="color: #f59e0b; margin-bottom: 1rem;"><i class="fas fa-clipboard-list"></i> Solicitudes de Acceso</h3>
+        <div id="requestsList"></div>
+      </div>
+      <div id="noRequestsPanel" style="display: none; text-align: center; padding: 3rem;">
+        <i class="fas fa-lock" style="font-size: 3rem; color: #f59e0b;"></i>
+        <p style="margin-top: 1rem;">Solo el administrador puede ver las solicitudes</p>
+        <button id="goToLoginFromRequestsBtn" style="background: #f59e0b; border: none; color: #0f172a; padding: 10px 20px; border-radius: 40px; margin-top: 1rem; cursor: pointer;">
           <i class="fas fa-sign-in-alt"></i> Iniciar Sesión como Admin
         </button>
       </div>
@@ -828,6 +1052,7 @@
   
   const COLLECTION_NAME = "multimedia_contents";
   const REPORTS_COLLECTION = "reports";
+  const ACCESS_REQUESTS_COLLECTION = "access_requests";
   const AD_CONFIG_COLLECTION = "ad_config";
   const ADMIN_EMAIL = "admin@streamfusion.com";
 
@@ -836,6 +1061,8 @@
   let isAdmin = false;
   let itemsList = [];
   let reportsList = [];
+  let requestsList = [];
+  let userApprovedRequests = []; // IDs de solicitudes aprobadas para el usuario actual
   let adConfig = { 
     duration: 15,
     nativeBannerCode: "",
@@ -843,8 +1070,26 @@
     popupAdUrl: ""
   };
   
+  // Referencias a los reproductores por pestaña
+  const players = {
+    drive: { video: null, iframe: null, hls: null, container: null, status: null },
+    mp4: { video: null, iframe: null, hls: null, container: null, status: null },
+    m3u8: { video: null, iframe: null, hls: null, container: null, status: null },
+    live: { video: null, iframe: null, hls: null, container: null, status: null },
+    test: { video: null, iframe: null, hls: null, container: null, status: null, testInput: null, testBtn: null }
+  };
+  
   let pendingCopyUrl = null;
-  let waitingModal = null;
+  
+  // Función global para cerrar reproductores
+  window.closePlayer = function(playerKey) {
+    const p = players[playerKey];
+    if (!p) return;
+    if (p.video) { p.video.style.display = "none"; p.video.pause(); p.video.src = ""; }
+    if (p.iframe) { p.iframe.style.display = "none"; p.iframe.src = "about:blank"; }
+    if (p.hls) { p.hls.destroy(); p.hls = null; }
+    if (p.status) p.status.innerText = "🔗 Reproductor cerrado. Haz clic en 'Ver' para reproducir.";
+  };
 
   // Elementos UI
   const loadingOverlay = document.getElementById("loadingOverlay");
@@ -855,191 +1100,291 @@
   const adminBadge = document.getElementById("adminBadge");
   const logoutBtn = document.getElementById("logoutBtn");
   const authButtons = document.getElementById("authButtons");
-  const syncStatusSpan = document.getElementById("syncText");
-  const syncStatusDiv = document.getElementById("syncStatus");
   const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
   const monetizationSection = document.getElementById("monetizationSection");
+  const urlsContainer = document.getElementById("urlsList");
+  const addUrlBtn = document.getElementById("addUrlBtn");
+
+  // ========== FUNCIONES DE URLs MÚLTIPLES ==========
+  let urlCount = 1;
+  const MAX_URLS = 3;
+
+  function updateUrlGroups() {
+    const groups = document.querySelectorAll('.url-group');
+    groups.forEach((group, index) => {
+      const headerLabel = group.querySelector('.url-header label');
+      const removeBtn = group.querySelector('.remove-url-btn');
+      if (headerLabel) headerLabel.textContent = `Servidor ${index + 1}`;
+      if (removeBtn) {
+        removeBtn.style.display = groups.length > 1 ? 'block' : 'none';
+        removeBtn.onclick = () => removeUrlGroup(index);
+      }
+    });
+  }
+
+  function removeUrlGroup(index) {
+    const groups = document.querySelectorAll('.url-group');
+    if (groups.length <= 1) return;
+    groups[index].remove();
+    updateUrlGroups();
+    urlCount--;
+  }
+
+  function addUrlGroup() {
+    if (urlCount >= MAX_URLS) {
+      Swal.fire({ title: 'Límite alcanzado', text: `Máximo ${MAX_URLS} servidores`, icon: 'warning', timer: 2000, showConfirmButton: false });
+      return;
+    }
+    const newGroup = document.createElement('div');
+    newGroup.className = 'url-group';
+    newGroup.innerHTML = `
+      <div class="url-header">
+        <label>Servidor ${urlCount + 1}</label>
+        <button type="button" class="remove-url-btn">✕</button>
+      </div>
+      <input type="text" class="server-url" placeholder="URL del servidor ${urlCount + 1}" value="">
+    `;
+    urlsContainer.appendChild(newGroup);
+    urlCount++;
+    updateUrlGroups();
+  }
+
+  addUrlBtn.addEventListener('click', addUrlGroup);
+
+  function getUrlsFromForm() {
+    const urlInputs = document.querySelectorAll('.server-url');
+    const urls = [];
+    for (let input of urlInputs) {
+      const url = input.value.trim();
+      if (url) urls.push(url);
+    }
+    return urls;
+  }
+
+  function setUrlsInForm(urls) {
+    const groups = document.querySelectorAll('.url-group');
+    for (let i = groups.length - 1; i > 0; i--) groups[i].remove();
+    urlCount = 1;
+    const firstInput = document.querySelector('.server-url');
+    if (firstInput) firstInput.value = urls[0] || '';
+    for (let i = 1; i < urls.length && i < MAX_URLS; i++) {
+      if (urls[i]) {
+        addUrlGroup();
+        const newInput = document.querySelectorAll('.server-url');
+        if (newInput[newInput.length - 1]) newInput[newInput.length - 1].value = urls[i];
+      }
+    }
+    updateUrlGroups();
+  }
+
+  // ========== FUNCIONES DE SOLICITUDES DE ACCESO ==========
+  
+  async function checkUserApprovalStatus() {
+    if (!currentUser || isAdmin) return;
+    try {
+      const snapshot = await db.collection(ACCESS_REQUESTS_COLLECTION)
+        .where("userEmail", "==", currentUser.email)
+        .where("status", "==", "approved")
+        .get();
+      userApprovedRequests = [];
+      snapshot.forEach(doc => userApprovedRequests.push(doc.id));
+    } catch (error) {
+      console.error("Error checking approval status:", error);
+    }
+  }
+  
+  async function showAccessRequestModal(urlToCopy, contentTitle) {
+    return new Promise((resolve) => {
+      const modal = document.createElement('div');
+      modal.className = 'request-modal';
+      modal.innerHTML = `
+        <div class="request-modal-content">
+          <div class="request-close-btn" id="requestCloseBtn">✕</div>
+          <div class="request-modal-header">
+            <h2><i class="fas fa-key"></i> Solicitar Acceso</h2>
+          </div>
+          <p style="margin-bottom: 1rem; color: #94a3b8;">Para copiar enlaces debes solicitar acceso al administrador</p>
+          <p><strong>Contenido:</strong> ${escapeHtml(contentTitle)}</p>
+          <input type="email" id="requestEmail" class="request-input" placeholder="Tu correo electrónico" value="${currentUser ? currentUser.email : ''}" ${currentUser ? 'readonly' : ''}>
+          <textarea id="requestReason" class="request-textarea" placeholder="Motivo de la solicitud..."></textarea>
+          <button class="request-submit-btn" id="requestSubmitBtn"><i class="fas fa-paper-plane"></i> Enviar Solicitud</button>
+        </div>`;
+      document.body.appendChild(modal);
+      
+      const closeBtn = document.getElementById('requestCloseBtn');
+      const submitBtn = document.getElementById('requestSubmitBtn');
+      
+      closeBtn.addEventListener('click', () => {
+        modal.remove();
+        resolve(false);
+      });
+      
+      submitBtn.addEventListener('click', async () => {
+        const email = document.getElementById('requestEmail').value.trim();
+        const reason = document.getElementById('requestReason').value.trim();
+        
+        if (!email) {
+          Swal.fire('Error', 'Ingresa tu correo electrónico', 'error');
+          return;
+        }
+        if (!reason) {
+          Swal.fire('Error', 'Ingresa el motivo de tu solicitud', 'error');
+          return;
+        }
+        
+        try {
+          await db.collection(ACCESS_REQUESTS_COLLECTION).add({
+            userEmail: email,
+            contentTitle: contentTitle,
+            contentUrl: urlToCopy,
+            reason: reason,
+            status: "pending",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          Swal.fire({
+            title: '✅ Solicitud Enviada',
+            text: 'El administrador revisará tu solicitud. Recibirás acceso cuando sea aprobada.',
+            icon: 'success'
+          });
+          modal.remove();
+          resolve(false);
+        } catch (error) {
+          Swal.fire('Error', 'No se pudo enviar la solicitud', 'error');
+          resolve(false);
+        }
+      });
+    });
+  }
+  
+  async function copyWithAccessControl(url, contentTitle) {
+    if (!currentUser) {
+      Swal.fire({
+        title: '⚠️ Acceso Restringido',
+        text: 'Debes iniciar sesión para copiar enlaces',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Iniciar Sesión',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) loginUser();
+      });
+      return;
+    }
+    
+    if (isAdmin) {
+      await navigator.clipboard.writeText(url);
+      Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
+      return;
+    }
+    
+    // Verificar si el usuario tiene solicitud aprobada
+    await checkUserApprovalStatus();
+    if (userApprovedRequests.length > 0) {
+      await navigator.clipboard.writeText(url);
+      Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
+      return;
+    }
+    
+    // Si no tiene aprobación, mostrar modal de solicitud
+    await showAccessRequestModal(url, contentTitle);
+  }
+  
+  // ========== FUNCIONES DE CARGAR SOLICITUDES (ADMIN) ==========
+  async function loadRequests() {
+    if (!isAdmin) return;
+    try {
+      const snapshot = await db.collection(ACCESS_REQUESTS_COLLECTION).orderBy("createdAt", "desc").get();
+      requestsList = [];
+      snapshot.forEach(doc => requestsList.push({ id: doc.id, ...doc.data() }));
+      renderRequestsList();
+    } catch (error) { console.error(error); }
+  }
+  
+  function renderRequestsList() {
+    const container = document.getElementById("requestsList");
+    if (!container) return;
+    if (requestsList.length === 0) { 
+      container.innerHTML = '<div class="empty-message"><i class="fas fa-check-circle"></i><p>No hay solicitudes pendientes</p></div>'; 
+      return; 
+    }
+    let html = '';
+    for (let req of requestsList) {
+      const date = req.createdAt ? new Date(req.createdAt.toDate()).toLocaleString() : 'Fecha desconocida';
+      const statusBadge = req.status === 'approved' ? '✅ Aprobada' : (req.status === 'rejected' ? '❌ Rechazada' : '⏳ Pendiente');
+      html += `<div class="request-item">
+        <div class="request-email">📧 ${escapeHtml(req.userEmail)}</div>
+        <div class="request-reason"><strong>Contenido:</strong> ${escapeHtml(req.contentTitle || 'N/A')}</div>
+        <div class="request-reason"><strong>Motivo:</strong> ${escapeHtml(req.reason)}</div>
+        <div class="request-meta">
+          <span><i class="fas fa-clock"></i> ${date}</span>
+          <span><strong>Estado:</strong> ${statusBadge}</span>
+          ${req.status === 'pending' ? `
+            <button class="approve-request-btn" data-id="${req.id}" data-email="${escapeHtml(req.userEmail)}"><i class="fas fa-check"></i> Aprobar</button>
+            <button class="reject-request-btn" data-id="${req.id}"><i class="fas fa-times"></i> Rechazar</button>
+          ` : ''}
+        </div>
+      </div>`;
+    }
+    container.innerHTML = html;
+    
+    document.querySelectorAll('.approve-request-btn').forEach(btn => 
+      btn.addEventListener('click', async (e) => { 
+        const id = btn.dataset.id;
+        const email = btn.dataset.email;
+        await db.collection(ACCESS_REQUESTS_COLLECTION).doc(id).update({ status: "approved" });
+        Swal.fire('Aprobado', `Se ha aprobado el acceso para ${email}`, 'success');
+        loadRequests();
+      })
+    );
+    
+    document.querySelectorAll('.reject-request-btn').forEach(btn => 
+      btn.addEventListener('click', async (e) => { 
+        const id = btn.dataset.id;
+        await db.collection(ACCESS_REQUESTS_COLLECTION).doc(id).update({ status: "rejected" });
+        Swal.fire('Rechazado', 'La solicitud ha sido rechazada', 'info');
+        loadRequests();
+      })
+    );
+  }
 
   // ========== FUNCIONES DE ANUNCIOS ==========
   
   function loadBanners() {
-    // Banner superior (468x60 debajo del header)
     if (adConfig.nativeBannerCode && adConfig.nativeBannerCode.trim()) {
       const topBanner468 = document.getElementById("topBanner468");
       topBanner468.innerHTML = adConfig.nativeBannerCode;
       const scripts = topBanner468.getElementsByTagName('script');
       for (let i = 0; i < scripts.length; i++) {
         const script = document.createElement('script');
-        if (scripts[i].src) {
-          script.src = scripts[i].src;
-          script.async = true;
-          script.setAttribute('data-cfasync', 'false');
-        } else {
-          script.text = scripts[i].text;
-        }
+        if (scripts[i].src) { script.src = scripts[i].src; script.async = true; script.setAttribute('data-cfasync', 'false'); }
+        else script.text = scripts[i].text;
         document.body.appendChild(script);
       }
     }
-    
-    // Banner inferior
     if (adConfig.banner468Code && adConfig.banner468Code.trim()) {
       const bottomBanner = document.getElementById("bottomBanner");
       bottomBanner.innerHTML = adConfig.banner468Code;
       const scripts = bottomBanner.getElementsByTagName('script');
       for (let i = 0; i < scripts.length; i++) {
         const script = document.createElement('script');
-        if (scripts[i].src) {
-          script.src = scripts[i].src;
-        } else {
-          script.text = scripts[i].text;
-        }
+        if (scripts[i].src) script.src = scripts[i].src;
+        else script.text = scripts[i].text;
         document.body.appendChild(script);
       }
     }
   }
 
-  async function showWaitingModalWithAd(urlToCopy, duration, popupAdUrl) {
-    return new Promise((resolve) => {
-      if (popupAdUrl && popupAdUrl.trim()) {
-        window.open(popupAdUrl, '_blank');
-      }
-      
-      const modal = document.createElement('div');
-      modal.className = 'waiting-modal';
-      modal.innerHTML = `
-        <div class="waiting-modal-content">
-          <div class="waiting-modal-header">
-            <h2><i class="fas fa-hourglass-half"></i> Espera un momento</h2>
-          </div>
-          <div class="waiting-timer" id="waitingTimer">${duration}</div>
-          <div class="waiting-progress">
-            <div class="waiting-progress-bar" id="waitingProgressBar"></div>
-          </div>
-          <div class="waiting-message" id="waitingMessage">
-            <i class="fas fa-ad"></i> Anuncio abierto en nueva pestaña<br>
-            Espera ${duration} segundos para copiar el enlace
-          </div>
-          <div class="ad-opened-badge">
-            <i class="fas fa-external-link-alt"></i> Si no ves el anuncio, revisa tu bloqueador de pop-ups
-          </div>
-          <button class="copy-unlock-btn" id="waitingCopyBtn">Copiar enlace</button>
-          <div class="close-waiting-btn" id="closeWaitingBtn">✕</div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-      
-      let timeLeft = duration;
-      const timerSpan = document.getElementById('waitingTimer');
-      const progressBar = document.getElementById('waitingProgressBar');
-      const copyBtn = document.getElementById('waitingCopyBtn');
-      const closeBtn = document.getElementById('closeWaitingBtn');
-      let canCopy = false;
-      
-      const timer = setInterval(() => {
-        timeLeft--;
-        timerSpan.innerText = timeLeft;
-        const progressPercent = ((duration - timeLeft) / duration) * 100;
-        progressBar.style.width = progressPercent + '%';
-        
-        if (timeLeft <= 0 && !canCopy) {
-          canCopy = true;
-          clearInterval(timer);
-          timerSpan.innerHTML = '<i class="fas fa-check-circle"></i>';
-          document.getElementById('waitingMessage').innerHTML = '<i class="fas fa-check"></i> ¡Tiempo completado! Ya puedes copiar el enlace.';
-          copyBtn.classList.add('active');
-          copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar enlace ahora';
-          closeBtn.classList.add('active');
-          progressBar.style.width = '100%';
-          progressBar.style.background = '#22c55e';
-        }
-      }, 1000);
-      
-      copyBtn.addEventListener('click', async () => {
-        if (canCopy) {
-          try {
-            await navigator.clipboard.writeText(urlToCopy);
-            modal.remove();
-            Swal.fire({ title: '✅ ¡Enlace copiado!', icon: 'success', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end', background: '#1e293b', color: '#fff' });
-            resolve(true);
-          } catch (err) {
-            const textarea = document.createElement('textarea');
-            textarea.value = urlToCopy;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            modal.remove();
-            Swal.fire({ title: '✅ ¡Enlace copiado!', icon: 'success', timer: 1500, showConfirmButton: false, toast: true, position: 'top-end' });
-            resolve(true);
-          }
-        }
-      });
-      
-      closeBtn.addEventListener('click', () => {
-        if (canCopy) {
-          modal.remove();
-          resolve(false);
-        }
-      });
-    });
-  }
-
-  async function copyWithAd(url) {
-    if (isAdmin) {
-      try {
-        await navigator.clipboard.writeText(url);
-        Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
-      } catch (err) {
-        const textarea = document.createElement('textarea');
-        textarea.value = url;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        Swal.fire({ title: '✅ Copiado!', timer: 1000, showConfirmButton: false, toast: true, position: 'top-end' });
-      }
-    } else {
-      await showWaitingModalWithAd(url, adConfig.duration, adConfig.popupAdUrl);
-    }
-  }
-
-  // ========== FUNCIONES DE CONFIGURACIÓN ==========
-  async function loadAdConfig() {
-    try {
-      const docRef = db.collection(AD_CONFIG_COLLECTION).doc("settings");
-      const doc = await docRef.get();
-      if (doc.exists) {
-        adConfig = doc.data();
-      } else {
-        adConfig = { 
-          duration: 15,
-          nativeBannerCode: "",
-          banner468Code: "",
-          popupAdUrl: ""
-        };
-        await docRef.set(adConfig);
-      }
-      loadBanners();
-    } catch (error) {
-      console.error("Error cargando configuración:", error);
-    }
-  }
-
   async function saveAdConfig(config) {
     if (!isAdmin) return false;
-    showLoading(true, "Guardando configuración...");
+    showLoading(true);
     try {
       await db.collection(AD_CONFIG_COLLECTION).doc("settings").set(config, { merge: true });
       adConfig = config;
       loadBanners();
-      Swal.fire({ title: '✅ Guardado', icon: 'success', timer: 1500, showConfirmButton: false });
+      Swal.fire({ title: '✅ Guardado', icon: 'success', timer: 1500 });
       showLoading(false);
       return true;
-    } catch (error) {
-      Swal.fire({ title: '❌ Error', text: error.message, icon: 'error' });
-      showLoading(false);
-      return false;
-    }
+    } catch (error) { Swal.fire('❌ Error', error.message, 'error'); showLoading(false); return false; }
   }
 
   // ========== FUNCIONES DE REPORTES ==========
@@ -1050,135 +1395,142 @@
       reportsList = [];
       snapshot.forEach(doc => reportsList.push({ id: doc.id, ...doc.data() }));
       renderReportsList();
-    } catch (error) {
-      console.error("Error cargando reportes:", error);
-    }
+    } catch (error) { console.error(error); }
   }
 
   function renderReportsList() {
     const container = document.getElementById("reportsList");
     if (!container) return;
-    
-    if (reportsList.length === 0) {
-      container.innerHTML = '<div class="empty-message"><i class="fas fa-check-circle" style="font-size: 2rem;"></i><p>No hay reportes pendientes</p></div>';
-      return;
-    }
-    
+    if (reportsList.length === 0) { container.innerHTML = '<div class="empty-message"><i class="fas fa-check-circle"></i><p>Sin reportes</p></div>'; return; }
     let html = '';
     for (let report of reportsList) {
       const date = report.createdAt ? new Date(report.createdAt.toDate()).toLocaleString() : 'Fecha desconocida';
-      html += `
-        <div class="report-item">
-          <div class="report-title">📺 ${escapeHtml(report.contentTitle)}</div>
-          <div class="report-reason"><strong>Motivo:</strong> ${escapeHtml(report.reason)}</div>
-          <div class="report-meta">
-            <span><i class="fas fa-user"></i> ${escapeHtml(report.reportedBy)}</span>
-            <span><i class="fas fa-clock"></i> ${date}</span>
-            <button class="resolve-report-btn" data-id="${report.id}"><i class="fas fa-check"></i> Marcar como resuelto</button>
-          </div>
-        </div>
-      `;
+      html += `<div class="report-item"><div class="report-title">📺 ${escapeHtml(report.contentTitle)}</div><div class="report-reason"><strong>Motivo:</strong> ${escapeHtml(report.reason)}</div><div class="report-meta"><span><i class="fas fa-user"></i> ${escapeHtml(report.reportedBy)}</span><span><i class="fas fa-clock"></i> ${date}</span><button class="resolve-report-btn" data-id="${report.id}">Resolver</button></div></div>`;
     }
     container.innerHTML = html;
-    
-    document.querySelectorAll('.resolve-report-btn').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        const reportId = btn.getAttribute('data-id');
-        await resolveReport(reportId);
-      });
-    });
-  }
-
-  async function resolveReport(reportId) {
-    if (!isAdmin) return;
-    const result = await Swal.fire({
-      title: '¿Marcar como resuelto?',
-      text: 'Este reporte se eliminará de la lista',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, resolver',
-      cancelButtonText: 'Cancelar'
-    });
-    if (result.isConfirmed) {
-      try {
-        await db.collection(REPORTS_COLLECTION).doc(reportId).delete();
-        reportsList = reportsList.filter(r => r.id !== reportId);
-        renderReportsList();
-        Swal.fire('Resuelto', 'El reporte ha sido marcado como resuelto', 'success');
-      } catch (error) {
-        Swal.fire('Error', 'No se pudo resolver el reporte', 'error');
-      }
-    }
+    document.querySelectorAll('.resolve-report-btn').forEach(btn => btn.addEventListener('click', async (e) => { const id = btn.dataset.id; await db.collection(REPORTS_COLLECTION).doc(id).delete(); loadReports(); Swal.fire('Resuelto', '', 'success'); }));
   }
 
   async function createReport(contentId, contentTitle, contentUrl, reason) {
-    if (!currentUser) {
-      Swal.fire('⚠️ Inicia sesión', 'Debes iniciar sesión para reportar contenido', 'warning');
-      return false;
-    }
-    
+    if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return false; }
     try {
-      await db.collection(REPORTS_COLLECTION).add({
-        contentId: contentId,
-        contentTitle: contentTitle,
-        contentUrl: contentUrl,
-        reason: reason,
-        reportedBy: currentUser.email,
-        reportedById: currentUser.uid,
-        status: "pending",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      Swal.fire({ title: '✅ Reporte enviado', text: 'Gracias por ayudarnos a mejorar', icon: 'success', timer: 3000, showConfirmButton: false });
+      await db.collection(REPORTS_COLLECTION).add({ contentId, contentTitle, contentUrl, reason, reportedBy: currentUser.email, reportedById: currentUser.uid, status: "pending", createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      Swal.fire({ title: '✅ Reporte enviado', icon: 'success', timer: 3000 });
       return true;
-    } catch (error) {
-      Swal.fire('Error', 'No se pudo enviar el reporte', 'error');
-      return false;
-    }
+    } catch (error) { Swal.fire('Error', 'No se pudo enviar', 'error'); return false; }
   }
 
   function showReportModal(contentId, contentTitle, contentUrl) {
     Swal.fire({
-      title: '📢 Reportar contenido',
-      html: `
-        <div style="text-align: left;">
-          <p><strong>Contenido:</strong> ${escapeHtml(contentTitle)}</p>
-          <label style="display: block; margin-top: 15px; margin-bottom: 5px;">Motivo del reporte:</label>
-          <select id="reportReason" style="width: 100%; padding: 8px; border-radius: 8px; background: #1e293b; color: white; border: 1px solid #334155;">
-            <option value="Enlace caído / No funciona">🔗 Enlace caído / No funciona</option>
-            <option value="Contenido incorrecto">❌ Contenido incorrecto</option>
-            <option value="Calidad de video baja">📹 Calidad de video baja</option>
-            <option value="No es lo que promete">⚠️ No es lo que promete</option>
-            <option value="Contenido inapropiado">🚫 Contenido inapropiado</option>
-            <option value="Otro">📝 Otro</option>
-          </select>
-          <textarea id="reportDetails" rows="3" style="width: 100%; margin-top: 10px; padding: 8px; border-radius: 8px; background: #1e293b; color: white; border: 1px solid #334155;" placeholder="Describe el problema (opcional)"></textarea>
-        </div>
-      `,
-      background: '#1e293b',
-      color: '#fff',
-      showCancelButton: true,
-      confirmButtonText: 'Enviar reporte',
-      cancelButtonText: 'Cancelar',
-      preConfirm: () => {
-        const reason = document.getElementById('reportReason').value;
-        const details = document.getElementById('reportDetails').value;
-        const fullReason = details ? `${reason}: ${details}` : reason;
-        return { reason: fullReason };
+      title: '📢 Reportar',
+      html: `<p><strong>${escapeHtml(contentTitle)}</strong></p><select id="reportReason" style="width:100%; padding:8px; border-radius:8px;"><option value="Enlace caído">Enlace caído</option><option value="Contenido incorrecto">Contenido incorrecto</option><option value="Otro">Otro</option></select><textarea id="reportDetails" rows="2" placeholder="Detalles"></textarea>`,
+      background: '#1e293b', color: '#fff', showCancelButton: true, confirmButtonText: 'Enviar',
+      preConfirm: () => ({ reason: document.getElementById('reportReason').value + ': ' + document.getElementById('reportDetails').value })
+    }).then(async (result) => { if (result.isConfirmed) await createReport(contentId, contentTitle, contentUrl, result.value.reason); });
+  }
+
+  // ========== REPRODUCTOR UNIFICADO POR PESTAÑA ==========
+  function initPlayers() {
+    // Drive
+    players.drive.video = document.getElementById("videoDrive");
+    players.drive.iframe = document.getElementById("iframeDrive");
+    players.drive.container = document.getElementById("playerContainerDrive");
+    players.drive.status = document.getElementById("statusDrive");
+    // Mp4
+    players.mp4.video = document.getElementById("videoMp4");
+    players.mp4.iframe = document.getElementById("iframeMp4");
+    players.mp4.status = document.getElementById("statusMp4");
+    // M3u8
+    players.m3u8.video = document.getElementById("videoM3u8");
+    players.m3u8.iframe = document.getElementById("iframeM3u8");
+    players.m3u8.status = document.getElementById("statusM3u8");
+    // Live
+    players.live.video = document.getElementById("videoLive");
+    players.live.iframe = document.getElementById("iframeLive");
+    players.live.status = document.getElementById("statusLive");
+    // Test global
+    players.test.video = document.getElementById("globalTestVideo");
+    players.test.iframe = document.getElementById("globalTestIframe");
+    players.test.status = document.getElementById("globalTestStatus");
+    players.test.testInput = document.getElementById("globalTestUrl");
+    players.test.testBtn = document.getElementById("globalTestPlayBtn");
+    
+    if (players.test.testBtn) {
+      players.test.testBtn.addEventListener("click", () => {
+        const url = players.test.testInput.value.trim();
+        if (url) playInPlayer("test", url);
+        else players.test.status.innerText = "❌ Ingresa una URL válida";
+      });
+    }
+  }
+
+  function destroyHls(playerKey) {
+    if (players[playerKey] && players[playerKey].hls) {
+      players[playerKey].hls.destroy();
+      players[playerKey].hls = null;
+    }
+  }
+
+  function playInPlayer(playerKey, url) {
+    const p = players[playerKey];
+    if (!p) return;
+    // Ocultar y resetear
+    if (p.video) { p.video.style.display = "none"; p.video.pause(); p.video.src = ""; }
+    if (p.iframe) { p.iframe.style.display = "none"; p.iframe.src = "about:blank"; }
+    destroyHls(playerKey);
+    
+    const urlLow = url.toLowerCase();
+    // Drive
+    if (urlLow.includes("drive.google.com")) {
+      let embedUrl = url;
+      const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (match) embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+      p.iframe.style.display = "block";
+      p.iframe.src = embedUrl;
+      if (p.status) p.status.innerText = "✅ Reproduciendo Google Drive";
+      return;
+    }
+    // M3U8
+    if (urlLow.includes(".m3u8") || urlLow.includes("m3u8")) {
+      if (Hls.isSupported() && p.video) {
+        p.video.style.display = "block";
+        p.video.controls = true;
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(p.video);
+        players[playerKey].hls = hls;
+        if (p.status) p.status.innerText = "📡 M3U8 / HLS";
+      } else if (p.video && p.video.canPlayType('application/vnd.apple.mpegurl')) {
+        p.video.style.display = "block";
+        p.video.src = url;
+        if (p.status) p.status.innerText = "📡 M3U8 (nativo)";
+      } else if (p.iframe) {
+        p.iframe.style.display = "block";
+        p.iframe.src = url;
+        if (p.status) p.status.innerText = "🌐 Iframe M3U8";
       }
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await createReport(contentId, contentTitle, contentUrl, result.value.reason);
+      return;
+    }
+    // MP4
+    if (urlLow.includes(".mp4")) {
+      if (p.video) {
+        p.video.style.display = "block";
+        p.video.src = url;
+        p.video.play().catch(e => console.log);
+        if (p.status) p.status.innerText = "🎬 MP4";
       }
-    });
+      return;
+    }
+    // Otros (iframe)
+    if (p.iframe) {
+      p.iframe.style.display = "block";
+      p.iframe.src = url;
+      if (p.status) p.status.innerText = "🌐 Reproduciendo en iframe";
+    }
   }
 
   // ========== FUNCIONES DE UI ==========
-  function showLoading(show, text = "Cargando...") {
-    loadingOverlay.style.display = show ? "flex" : "none";
-    if (show && document.querySelector(".loading-overlay p")) {
-      document.querySelector(".loading-overlay p").innerText = text;
-    }
-  }
+  function showLoading(show) { loadingOverlay.style.display = show ? "flex" : "none"; }
 
   function updateUIForUser() {
     if (currentUser) {
@@ -1189,48 +1541,39 @@
       adminBadge.style.display = isAdmin ? "inline-block" : "none";
       sidebarToggleBtn.style.display = "flex";
       monetizationSection.style.display = isAdmin ? "block" : "none";
-      
       const reportsTab = document.getElementById('reportsTabBtn');
+      const requestsTab = document.getElementById('requestsTabBtn');
       const adsTab = document.getElementById('adsTabBtn');
-      
       if (isAdmin) {
         if (reportsTab) reportsTab.style.display = "flex";
+        if (requestsTab) requestsTab.style.display = "flex";
         if (adsTab) adsTab.style.display = "flex";
-        
-        const adminReportsPanel = document.getElementById("adminReportsPanel");
-        const noReportsPanel = document.getElementById("noReportsPanel");
-        const adminAdsPanel = document.getElementById("adminAdsPanel");
-        const noAdminPanel = document.getElementById("noAdminPanel");
-        
-        if (adminReportsPanel) adminReportsPanel.style.display = "block";
-        if (noReportsPanel) noReportsPanel.style.display = "none";
-        if (adminAdsPanel) adminAdsPanel.style.display = "block";
-        if (noAdminPanel) noAdminPanel.style.display = "none";
-        
+        document.getElementById("adminReportsPanel").style.display = "block";
+        document.getElementById("noReportsPanel").style.display = "none";
+        document.getElementById("adminRequestsPanel").style.display = "block";
+        document.getElementById("noRequestsPanel").style.display = "none";
+        document.getElementById("adminAdsPanel").style.display = "block";
+        document.getElementById("noAdminPanel").style.display = "none";
         loadReports();
-        
+        loadRequests();
         document.getElementById("adsNativeBannerCode").value = adConfig.nativeBannerCode || "";
         document.getElementById("adsBanner468Code").value = adConfig.banner468Code || "";
         document.getElementById("adsPopupUrl").value = adConfig.popupAdUrl || "";
         document.getElementById("adsDuration").value = adConfig.duration || 15;
-        
         document.getElementById("nativeBannerCode").value = adConfig.nativeBannerCode || "";
         document.getElementById("banner468Code").value = adConfig.banner468Code || "";
         document.getElementById("popupAdUrl").value = adConfig.popupAdUrl || "";
         document.getElementById("adDuration").value = adConfig.duration || 15;
       } else {
         if (reportsTab) reportsTab.style.display = "none";
+        if (requestsTab) requestsTab.style.display = "none";
         if (adsTab) adsTab.style.display = "none";
-        
-        const adminReportsPanel = document.getElementById("adminReportsPanel");
-        const noReportsPanel = document.getElementById("noReportsPanel");
-        const adminAdsPanel = document.getElementById("adminAdsPanel");
-        const noAdminPanel = document.getElementById("noAdminPanel");
-        
-        if (adminReportsPanel) adminReportsPanel.style.display = "none";
-        if (noReportsPanel) noReportsPanel.style.display = "block";
-        if (adminAdsPanel) adminAdsPanel.style.display = "none";
-        if (noAdminPanel) noAdminPanel.style.display = "block";
+        if(document.getElementById("adminReportsPanel")) document.getElementById("adminReportsPanel").style.display = "none";
+        if(document.getElementById("noReportsPanel")) document.getElementById("noReportsPanel").style.display = "block";
+        if(document.getElementById("adminRequestsPanel")) document.getElementById("adminRequestsPanel").style.display = "none";
+        if(document.getElementById("noRequestsPanel")) document.getElementById("noRequestsPanel").style.display = "block";
+        if(document.getElementById("adminAdsPanel")) document.getElementById("adminAdsPanel").style.display = "none";
+        if(document.getElementById("noAdminPanel")) document.getElementById("noAdminPanel").style.display = "block";
       }
     } else {
       authButtons.style.display = "flex";
@@ -1238,89 +1581,65 @@
       isAdmin = false;
       sidebarToggleBtn.style.display = "none";
       monetizationSection.style.display = "none";
-      
       const reportsTab = document.getElementById('reportsTabBtn');
+      const requestsTab = document.getElementById('requestsTabBtn');
       const adsTab = document.getElementById('adsTabBtn');
       if (reportsTab) reportsTab.style.display = "none";
+      if (requestsTab) requestsTab.style.display = "none";
       if (adsTab) adsTab.style.display = "none";
-      
       if (sidebar.classList.contains("open")) closeSidebar();
     }
     renderAllSections();
   }
 
-  function updateSyncStatus(status, isError = false) {
-    syncStatusSpan.innerText = status;
-    if (isError) syncStatusDiv.classList.add("offline");
-    else syncStatusDiv.classList.add("online");
-  }
-
   // ========== FIRESTORE OPERATIONS ==========
   async function loadFromFirestore() {
-    showLoading(true, "Cargando...");
+    showLoading(true);
     try {
       const snapshot = await db.collection(COLLECTION_NAME).orderBy("createdAt", "desc").get();
       itemsList = [];
       snapshot.forEach(doc => itemsList.push({ id: doc.id, ...doc.data() }));
       renderAllSections();
       showLoading(false);
-    } catch (error) {
-      console.error(error);
-      showLoading(false);
-    }
+    } catch (error) { console.error(error); showLoading(false); }
   }
 
   async function addToFirestore(item) {
     if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return false; }
-    showLoading(true, "Guardando...");
+    showLoading(true);
     try {
-      const docRef = await db.collection(COLLECTION_NAME).add({
-        ...item,
-        createdBy: currentUser.email,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      const docRef = await db.collection(COLLECTION_NAME).add({ ...item, createdBy: currentUser.email, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       item.id = docRef.id;
       itemsList.unshift(item);
       renderAllSections();
       showLoading(false);
       return true;
-    } catch (error) {
-      showLoading(false);
-      Swal.fire('Error', 'No se pudo guardar', 'error');
-      return false;
-    }
+    } catch (error) { showLoading(false); Swal.fire('Error', 'No se pudo guardar', 'error'); return false; }
   }
 
   async function deleteFromFirestore(id) {
-    if (!isAdmin) { Swal.fire('⛔ Acceso denegado', 'Solo el administrador puede eliminar', 'error'); return false; }
-    showLoading(true, "Eliminando...");
+    if (!isAdmin) { Swal.fire('⛔ Denegado', 'Solo admin', 'error'); return false; }
+    showLoading(true);
     try {
       await db.collection(COLLECTION_NAME).doc(id).delete();
       itemsList = itemsList.filter(i => i.id !== id);
       renderAllSections();
       showLoading(false);
       return true;
-    } catch (error) {
-      showLoading(false);
-      Swal.fire('Error', 'No se pudo eliminar', 'error');
-      return false;
-    }
+    } catch (error) { showLoading(false); Swal.fire('Error', 'No se pudo eliminar', 'error'); return false; }
   }
 
   function renderAllSections() {
-    renderContainer("driveContainer", itemsList.filter(i => i.type === "drive"));
-    renderContainer("mp4Container", itemsList.filter(i => i.type === "mp4"));
-    renderContainer("m3u8Container", itemsList.filter(i => i.type === "m3u8"));
-    renderContainer("liveContainer", itemsList.filter(i => i.type === "live"));
+    renderContainer("driveContainer", itemsList.filter(i => i.type === "drive"), "drive");
+    renderContainer("mp4Container", itemsList.filter(i => i.type === "mp4"), "mp4");
+    renderContainer("m3u8Container", itemsList.filter(i => i.type === "m3u8"), "m3u8");
+    renderContainer("liveContainer", itemsList.filter(i => i.type === "live"), "live");
   }
 
-  function renderContainer(containerId, items) {
+  function renderContainer(containerId, items, playerKey) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    if (items.length === 0) {
-      container.innerHTML = `<div class="empty-message"><i class="fas fa-folder-open" style="font-size: 2rem;"></i><p>Sin elementos</p></div>`;
-      return;
-    }
+    if (items.length === 0) { container.innerHTML = `<div class="empty-message"><i class="fas fa-folder-open"></i><p>Sin elementos</p></div>`; return; }
     let html = "";
     for (let item of items) {
       let badge = "", badgeColor = "";
@@ -1328,332 +1647,154 @@
       else if (item.type === "mp4") { badge = "🎬 MP4"; badgeColor = "#dc2626"; }
       else if (item.type === "m3u8") { badge = "📡 M3U8"; badgeColor = "#7c3aed"; }
       else if (item.type === "live") { badge = "📺 LIVE"; badgeColor = "#f59e0b"; }
-      
       const yearBadge = item.year ? `<div class="card-year"><i class="far fa-calendar-alt"></i> ${escapeHtml(item.year)}</div>` : '';
-      
-      html += `
-        <div class="card">
-          <img class="card-img" src="${item.img || 'https://via.placeholder.com/200x240?text=Sin+Portada'}" onerror="this.src='https://via.placeholder.com/200x240?text=Sin+Portada'">
-          <div class="card-body">
-            <div class="card-title">${escapeHtml(item.title)}</div>
-            ${yearBadge}
-            <div class="card-source" style="background: ${badgeColor}20; color: ${badgeColor};">${badge}</div>
-            <button class="btn-preview" onclick="openPreviewFromUrl('${escapeUrl(item.url)}')"><i class="fas fa-play"></i> Ver</button>
-            <button class="copy-btn-card" data-url="${escapeUrl(item.url)}"><i class="fas fa-copy"></i> Copiar</button>
-            <button class="report-btn" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-url="${escapeUrl(item.url)}"><i class="fas fa-flag"></i> Reportar</button>
-            <button class="delete-btn" data-id="${item.id}" ${!isAdmin ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isAdmin ? 'Eliminar' : 'Admin'}</button>
-          </div>
-        </div>
-      `;
+      const urls = item.urls || (item.url ? [item.url] : []);
+      let serversHtml = '';
+      if (urls.length > 0) {
+        serversHtml = '<div class="servers-buttons">';
+        urls.forEach((url, idx) => { serversHtml += `<button class="server-btn" data-url="${escapeUrl(url)}" data-title="${escapeHtml(item.title)}">🔗 Servidor ${idx+1}</button>`; });
+        serversHtml += '</div>';
+      }
+      html += `<div class="card"><img class="card-img" src="${item.img || 'https://via.placeholder.com/200x240'}" onerror="this.src='https://via.placeholder.com/200x240'"><div class="card-body"><div class="card-title">${escapeHtml(item.title)}</div>${yearBadge}<div class="card-source" style="background:${badgeColor}20; color:${badgeColor};">${badge}</div>${serversHtml}<button class="btn-preview" data-urls='${JSON.stringify(urls)}' data-player="${playerKey}"><i class="fas fa-play"></i> Ver</button><button class="report-btn" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-urls='${JSON.stringify(urls)}'><i class="fas fa-flag"></i> Reportar</button><button class="delete-btn" data-id="${item.id}" ${!isAdmin ? 'disabled' : ''}><i class="fas fa-trash"></i> ${isAdmin ? 'Eliminar' : 'Admin'}</button></div></div>`;
     }
     container.innerHTML = html;
-
-    document.querySelectorAll(`#${containerId} .copy-btn-card`).forEach(btn => {
-      btn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const url = btn.getAttribute("data-url");
-        if (url) await copyWithAd(url);
-      });
-    });
-    
-    document.querySelectorAll(`#${containerId} .report-btn`).forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        const id = btn.getAttribute("data-id");
-        const title = btn.getAttribute("data-title");
-        const url = btn.getAttribute("data-url");
-        showReportModal(id, title, url);
-      });
-    });
-    
-    document.querySelectorAll(`#${containerId} .delete-btn`).forEach(btn => {
-      btn.addEventListener("click", async (e) => {
-        const id = btn.getAttribute("data-id");
-        const result = await Swal.fire({ title: '¿Eliminar?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#dc2626', confirmButtonText: 'Sí', cancelButtonText: 'Cancelar' });
-        if (result.isConfirmed) await deleteFromFirestore(id);
-      });
-    });
+    // Eventos copiar con control de acceso
+    container.querySelectorAll('.server-btn').forEach(btn => btn.addEventListener("click", async (e) => { 
+      e.stopPropagation(); 
+      const url = btn.getAttribute("data-url"); 
+      const title = btn.getAttribute("data-title");
+      if (url) await copyWithAccessControl(url, title); 
+    }));
+    // Eventos Ver (reproducir en su player)
+    container.querySelectorAll('.btn-preview').forEach(btn => btn.addEventListener("click", (e) => { 
+      e.preventDefault(); 
+      const player = btn.getAttribute("data-player"); 
+      const urlsAttr = btn.getAttribute("data-urls"); 
+      try { 
+        const urls = JSON.parse(urlsAttr); 
+        if (urls && urls.length) playInPlayer(player, urls[0]); 
+        else Swal.fire('Error', 'Sin URL', 'error'); 
+      } catch(e) { Swal.fire('Error', 'URL inválida', 'error'); } 
+    }));
+    // Eventos reportar
+    container.querySelectorAll('.report-btn').forEach(btn => btn.addEventListener("click", (e) => { 
+      const id = btn.dataset.id; 
+      const title = btn.dataset.title; 
+      const urlsAttr = btn.getAttribute("data-urls"); 
+      let firstUrl = ""; 
+      try { const u = JSON.parse(urlsAttr); if(u.length) firstUrl = u[0]; } catch(e){} 
+      showReportModal(id, title, firstUrl); 
+    }));
+    // Eliminar
+    container.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener("click", async (e) => { 
+      if (!isAdmin) return; 
+      const id = btn.dataset.id; 
+      const result = await Swal.fire({ title: '¿Eliminar?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#dc2626', confirmButtonText: 'Sí' }); 
+      if (result.isConfirmed) await deleteFromFirestore(id); 
+    }));
   }
 
   // ========== AUTHENTICATION ==========
   async function registerUser() {
-    const result = await Swal.fire({
-      title: '📝 Registro',
-      html: `<input type="email" id="regEmail" class="swal2-input" placeholder="Email"><input type="password" id="regPassword" class="swal2-input" placeholder="Contraseña (mín 6)"><input type="password" id="regConfirm" class="swal2-input" placeholder="Confirmar">`,
-      background: '#1e293b', color: '#fff',
-      showCancelButton: true, confirmButtonText: 'Registrarse',
-      preConfirm: () => {
-        const email = document.getElementById('regEmail').value;
-        const pwd = document.getElementById('regPassword').value;
-        const confirm = document.getElementById('regConfirm').value;
-        if (!email || !pwd) return Swal.showValidationMessage('Completa los campos');
-        if (pwd !== confirm) return Swal.showValidationMessage('Las contraseñas no coinciden');
-        if (pwd.length < 6) return Swal.showValidationMessage('Mínimo 6 caracteres');
-        return { email, password: pwd };
-      }
-    });
-    if (result.value) {
-      showLoading(true, "Creando cuenta...");
-      try {
-        await auth.createUserWithEmailAndPassword(result.value.email, result.value.password);
-        Swal.fire({ title: '✅ Registro exitoso', icon: 'success', timer: 1500, showConfirmButton: false });
-      } catch (error) {
-        Swal.fire({ title: '❌ Error', text: error.message, icon: 'error' });
-      } finally { showLoading(false); }
-    }
+    const result = await Swal.fire({ title: '📝 Registro', html: `<input id="regEmail" class="swal2-input" placeholder="Email"><input id="regPassword" class="swal2-input" placeholder="Contraseña">`, background: '#1e293b', color: '#fff', showCancelButton: true, confirmButtonText: 'Registrarse', preConfirm: () => ({ email: document.getElementById('regEmail').value, password: document.getElementById('regPassword').value }) });
+    if (result.value) { showLoading(true); try { await auth.createUserWithEmailAndPassword(result.value.email, result.value.password); Swal.fire('✅ Registro exitoso', '', 'success'); } catch (error) { Swal.fire('❌ Error', error.message, 'error'); } finally { showLoading(false); } }
   }
-
   async function loginUser() {
-    const result = await Swal.fire({
-      title: '🔐 Iniciar Sesión',
-      html: `<input type="email" id="loginEmail" class="swal2-input" placeholder="Email"><input type="password" id="loginPassword" class="swal2-input" placeholder="Contraseña">`,
-      background: '#1e293b', color: '#fff',
-      showCancelButton: true, confirmButtonText: 'Ingresar',
-      preConfirm: () => ({ email: document.getElementById('loginEmail').value, password: document.getElementById('loginPassword').value })
-    });
-    if (result.value) {
-      showLoading(true, "Iniciando...");
-      try {
-        await auth.signInWithEmailAndPassword(result.value.email, result.value.password);
-        Swal.fire({ title: '✅ Bienvenido', icon: 'success', timer: 1500, showConfirmButton: false });
-      } catch (error) {
-        Swal.fire({ title: '❌ Error', text: error.message, icon: 'error' });
-      } finally { showLoading(false); }
-    }
+    const result = await Swal.fire({ title: '🔐 Login', html: `<input id="loginEmail" class="swal2-input" placeholder="Email"><input id="loginPassword" class="swal2-input" placeholder="Contraseña">`, background: '#1e293b', color: '#fff', showCancelButton: true, confirmButtonText: 'Ingresar', preConfirm: () => ({ email: document.getElementById('loginEmail').value, password: document.getElementById('loginPassword').value }) });
+    if (result.value) { showLoading(true); try { await auth.signInWithEmailAndPassword(result.value.email, result.value.password); Swal.fire('✅ Bienvenido', '', 'success'); } catch (error) { Swal.fire('❌ Error', error.message, 'error'); } finally { showLoading(false); } }
   }
-
   async function logout() { await auth.signOut(); }
-
-  // ========== REPRODUCTOR ==========
-  const testUrlInput = document.getElementById("testUrl");
-  const btnTest = document.getElementById("btnTestUrl");
-  const testVideo = document.getElementById("testVideo");
-  const testIframe = document.getElementById("testIframe");
-  const testStatus = document.getElementById("testStatus");
-  let currentHls = null;
-
-  function detectAndPlay(url) {
-    if (currentHls) { currentHls.destroy(); currentHls = null; }
-    testVideo.style.display = "none";
-    testIframe.style.display = "none";
-    testVideo.pause();
-    testIframe.src = "about:blank";
-    
-    const urlLow = url.toLowerCase();
-    if (urlLow.includes("drive.google.com")) {
-      let embedUrl = url;
-      const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (match) embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
-      testIframe.style.display = "block";
-      testIframe.src = embedUrl;
-      testStatus.innerText = "✅ Reproduciendo Drive";
-      return;
-    }
-    if (urlLow.includes(".m3u8")) {
-      if (Hls.isSupported()) {
-        testVideo.style.display = "block";
-        testVideo.controls = true;
-        currentHls = new Hls();
-        currentHls.loadSource(url);
-        currentHls.attachMedia(testVideo);
-        testStatus.innerText = "📡 M3U8";
-      } else { testStatus.innerText = "❌ M3U8 no soportado"; }
-      return;
-    }
-    if (urlLow.includes(".mp4")) {
-      testVideo.style.display = "block";
-      testVideo.src = url;
-      testVideo.play().catch(() => {});
-      testStatus.innerText = "🎬 MP4";
-      return;
-    }
-    testIframe.style.display = "block";
-    testIframe.src = url;
-    testStatus.innerText = "🌐 Iframe";
-  }
-
-  btnTest.addEventListener("click", () => {
-    let url = testUrlInput.value.trim();
-    if (!url) { testStatus.innerText = "❌ Escribe un enlace"; return; }
-    detectAndPlay(url);
-  });
-
-  window.openPreviewFromUrl = function(url) {
-    testUrlInput.value = url;
-    detectAndPlay(url);
-  };
 
   // ========== SIDEBAR Y PESTAÑAS ==========
   const sidebar = document.getElementById("sidebar");
   const closeBtn = document.getElementById("closeSidebarBtn");
-
-  function openSidebar() {
-    if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return; }
-    sidebar.classList.add("open");
-    sidebarToggleBtn.style.opacity = "0";
-    sidebarToggleBtn.style.pointerEvents = "none";
-  }
-  function closeSidebar() {
-    sidebar.classList.remove("open");
-    sidebarToggleBtn.style.opacity = "1";
-    sidebarToggleBtn.style.pointerEvents = "auto";
-  }
+  function openSidebar() { if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return; } sidebar.classList.add("open"); sidebarToggleBtn.style.opacity = "0"; sidebarToggleBtn.style.pointerEvents = "none"; }
+  function closeSidebar() { sidebar.classList.remove("open"); sidebarToggleBtn.style.opacity = "1"; sidebarToggleBtn.style.pointerEvents = "auto"; }
   sidebarToggleBtn.addEventListener("click", openSidebar);
   closeBtn.addEventListener("click", closeSidebar);
-  document.addEventListener("click", (e) => {
-    if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && !sidebarToggleBtn.contains(e.target)) closeSidebar();
-  });
+  document.addEventListener("click", (e) => { if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && !sidebarToggleBtn.contains(e.target)) closeSidebar(); });
 
   function setupTabs() {
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
-    
-    tabBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tabId = btn.getAttribute('data-tab');
-        tabBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        tabPanes.forEach(pane => pane.classList.remove('active'));
-        const activePane = document.getElementById(`tab-${tabId}`);
-        if (activePane) activePane.classList.add('active');
-      });
-    });
+    tabBtns.forEach(btn => btn.addEventListener('click', () => { const tabId = btn.getAttribute('data-tab'); tabBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); tabPanes.forEach(pane => pane.classList.remove('active')); const activePane = document.getElementById(`tab-${tabId}`); if (activePane) activePane.classList.add('active'); }));
   }
 
   // ========== AGREGAR ==========
   document.getElementById("btnAddItem").addEventListener("click", async () => {
     if (!currentUser) { Swal.fire('⚠️ Login', 'Debes iniciar sesión', 'warning'); return; }
     const title = document.getElementById("inputTitle").value.trim();
-    const url = document.getElementById("inputUrl").value.trim();
+    const urls = getUrlsFromForm();
     const type = document.getElementById("inputType").value;
     let img = document.getElementById("inputImg").value.trim();
     const year = document.getElementById("inputYear").value.trim();
-    
-    if (!title || !url) { Swal.fire('Error', 'Completa título y enlace', 'error'); return; }
-    if (!img) img = "https://via.placeholder.com/200x240?text=Sin+Portada";
-    
-    const success = await addToFirestore({ title, type, url, img, year });
+    if (!title || urls.length === 0) { Swal.fire('Error', 'Completa título y al menos un enlace', 'error'); return; }
+    if (!img) img = "https://via.placeholder.com/200x240";
+    const success = await addToFirestore({ title, type, urls, img, year });
     if (success) {
-      document.getElementById("inputTitle").value = "";
-      document.getElementById("inputUrl").value = "";
-      document.getElementById("inputYear").value = "";
-      document.getElementById("inputImg").value = "";
-      Swal.fire('✅ Agregado', 'Contenido guardado', 'success', { timer: 1500 });
-      closeSidebar();
+      document.getElementById("inputTitle").value = ""; document.getElementById("inputYear").value = ""; document.getElementById("inputImg").value = "";
+      const firstInput = document.querySelector('.server-url'); if (firstInput) firstInput.value = '';
+      const groups = document.querySelectorAll('.url-group'); for (let i = groups.length - 1; i > 0; i--) groups[i].remove();
+      urlCount = 1; updateUrlGroups();
+      Swal.fire('✅ Agregado', '', 'success', { timer: 1500 }); closeSidebar();
     }
   });
 
-  // ========== GUARDAR CONFIGURACIÓN DE ANUNCIOS ==========
-  document.getElementById("saveAdsConfigBtn").addEventListener("click", async () => {
-    if (!isAdmin) return;
-    const config = {
-      nativeBannerCode: document.getElementById("adsNativeBannerCode").value,
-      banner468Code: document.getElementById("adsBanner468Code").value,
-      popupAdUrl: document.getElementById("adsPopupUrl").value,
-      duration: parseInt(document.getElementById("adsDuration").value) || 15
-    };
-    if (config.duration < 5) config.duration = 5;
-    if (config.duration > 60) config.duration = 60;
-    await saveAdConfig(config);
-  });
+  // Guardar ads
+  document.getElementById("saveAdsConfigBtn")?.addEventListener("click", async () => { if(isAdmin){ const config = { nativeBannerCode: document.getElementById("adsNativeBannerCode").value, banner468Code: document.getElementById("adsBanner468Code").value, popupAdUrl: document.getElementById("adsPopupUrl").value, duration: parseInt(document.getElementById("adsDuration").value) || 15 }; await saveAdConfig(config); } });
+  document.getElementById("btnSaveAdConfig")?.addEventListener("click", async () => { if(isAdmin){ const config = { nativeBannerCode: document.getElementById("nativeBannerCode").value, banner468Code: document.getElementById("banner468Code").value, popupAdUrl: document.getElementById("popupAdUrl").value, duration: parseInt(document.getElementById("adDuration").value) || 15 }; await saveAdConfig(config); } });
+  document.getElementById("goToLoginBtn")?.addEventListener("click", loginUser);
+  document.getElementById("goToLoginFromReportsBtn")?.addEventListener("click", loginUser);
+  document.getElementById("goToLoginFromRequestsBtn")?.addEventListener("click", loginUser);
 
-  document.getElementById("btnSaveAdConfig").addEventListener("click", async () => {
-    if (!isAdmin) return;
-    const config = {
-      nativeBannerCode: document.getElementById("nativeBannerCode").value,
-      banner468Code: document.getElementById("banner468Code").value,
-      popupAdUrl: document.getElementById("popupAdUrl").value,
-      duration: parseInt(document.getElementById("adDuration").value) || 15
-    };
-    if (config.duration < 5) config.duration = 5;
-    if (config.duration > 60) config.duration = 60;
-    await saveAdConfig(config);
-  });
-
-  // Botones para ir a login
-  document.getElementById("goToLoginBtn")?.addEventListener("click", () => loginUser());
-  document.getElementById("goToLoginFromReportsBtn")?.addEventListener("click", () => loginUser());
-
-  // ========== TMDb SEARCH (mejorado con año y poster) ==========
+  // ========== TMDb SEARCH ==========
   const TMDB_API = "f3e064ad91ca31d7dfb85a60eed82d71";
   const TMDB_IMG = "https://image.tmdb.org/t/p/w200";
   const tmdbInput = document.getElementById("tmdbQuery");
   const tmdbResultsDiv = document.getElementById("tmdbResults");
   let debT;
-
-  tmdbInput.addEventListener("input", () => {
-    const q = tmdbInput.value.trim();
-    if (q.length < 2) { tmdbResultsDiv.style.display = "none"; return; }
-    clearTimeout(debT);
-    debT = setTimeout(() => searchTMDB(q), 500);
-  });
-
+  tmdbInput.addEventListener("input", () => { const q = tmdbInput.value.trim(); if (q.length < 2) { tmdbResultsDiv.style.display = "none"; return; } clearTimeout(debT); debT = setTimeout(() => searchTMDB(q), 500); });
   async function searchTMDB(query) {
     try {
       const resp = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API}&language=es&query=${encodeURIComponent(query)}`);
       const data = await resp.json();
-      if (!data.results || !data.results.length) {
-        tmdbResultsDiv.innerHTML = "<div style='padding:8px'>Sin resultados</div>";
-        tmdbResultsDiv.style.display = "block";
-        return;
-      }
+      if (!data.results.length) { tmdbResultsDiv.innerHTML = "<div>Sin resultados</div>"; tmdbResultsDiv.style.display = "block"; return; }
       let html = "";
-      data.results.slice(0, 8).forEach(r => {
-        const nombre = r.title || r.name;
-        const poster = r.poster_path ? TMDB_IMG + r.poster_path : "";
-        const year = r.release_date ? r.release_date.split('-')[0] : (r.first_air_date ? r.first_air_date.split('-')[0] : '');
-        const mediaType = r.media_type === 'movie' ? '🎬 Película' : '📺 Serie';
-        html += `<div class="tmdb-item" data-title="${escapeHtml(nombre)}" data-poster="${poster}" data-year="${year}">
-                  <div style="display: flex; gap: 10px; align-items: center;">
-                    ${poster ? `<img src="${poster}" style="width: 40px; height: 60px; object-fit: cover; border-radius: 8px;">` : '<i class="fas fa-film" style="font-size: 2rem;"></i>'}
-                    <div>
-                      <strong>${escapeHtml(nombre)}</strong><br>
-                      <small>${mediaType} ${year ? `• ${year}` : ''}</small>
-                    </div>
-                  </div>
-                </div>`;
-      });
-      tmdbResultsDiv.innerHTML = html;
-      tmdbResultsDiv.style.display = "block";
-      document.querySelectorAll(".tmdb-item").forEach(el => {
-        el.addEventListener("click", () => {
-          document.getElementById("inputTitle").value = el.getAttribute("data-title");
-          const poster = el.getAttribute("data-poster");
-          const year = el.getAttribute("data-year");
-          if (poster) document.getElementById("inputImg").value = poster;
-          if (year) document.getElementById("inputYear").value = year;
-          tmdbResultsDiv.style.display = "none";
-          tmdbInput.value = "";
-        });
-      });
-    } catch (e) { console.error(e); }
+      data.results.slice(0,8).forEach(r => { const nombre = r.title || r.name; const poster = r.poster_path ? TMDB_IMG + r.poster_path : ""; const year = r.release_date ? r.release_date.split('-')[0] : (r.first_air_date ? r.first_air_date.split('-')[0] : ''); html += `<div class="tmdb-item" data-title="${escapeHtml(nombre)}" data-poster="${poster}" data-year="${year}"><div style="display:flex; gap:10px;">${poster ? `<img src="${poster}" style="width:40px; height:60px;">` : '<i class="fas fa-film"></i>'}<div><strong>${escapeHtml(nombre)}</strong><br><small>${year}</small></div></div></div>`; });
+      tmdbResultsDiv.innerHTML = html; tmdbResultsDiv.style.display = "block";
+      document.querySelectorAll(".tmdb-item").forEach(el => el.addEventListener("click", () => { document.getElementById("inputTitle").value = el.getAttribute("data-title"); if(el.getAttribute("data-poster")) document.getElementById("inputImg").value = el.getAttribute("data-poster"); if(el.getAttribute("data-year")) document.getElementById("inputYear").value = el.getAttribute("data-year"); tmdbResultsDiv.style.display = "none"; tmdbInput.value = ""; }));
+    } catch(e) { console.error(e); }
   }
+  document.addEventListener("click", (e) => { if (!tmdbInput.contains(e.target) && !tmdbResultsDiv.contains(e.target)) tmdbResultsDiv.style.display = "none"; });
 
-  document.addEventListener("click", (e) => {
-    if (!tmdbInput.contains(e.target) && !tmdbResultsDiv.contains(e.target)) tmdbResultsDiv.style.display = "none";
-  });
-
-  function escapeHtml(str) { 
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); 
-  }
+  function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
   function escapeUrl(url) { return url.replace(/'/g, "\\'"); }
 
   document.getElementById("telegramLink").href = "https://t.me/+zUBuNfBjwlczOGZh";
   document.getElementById("webLink").href = "https://polosurtv.top";
 
-  // ========== EVENTOS ==========
+  // ========== EVENTOS E INICIALIZACIÓN ==========
   loginBtn.addEventListener("click", loginUser);
   registerBtn.addEventListener("click", registerUser);
   logoutBtn.addEventListener("click", logout);
 
-  // ========== INICIALIZAR ==========
+  async function loadAdConfig() {
+    try {
+      const docRef = db.collection(AD_CONFIG_COLLECTION).doc("settings");
+      const doc = await docRef.get();
+      if (doc.exists) adConfig = doc.data();
+      else { adConfig = { duration: 15, nativeBannerCode: "", banner468Code: "", popupAdUrl: "" }; await docRef.set(adConfig); }
+      loadBanners();
+    } catch (error) { console.error(error); }
+  }
+
   auth.onAuthStateChanged(async (user) => {
     currentUser = user;
     await loadAdConfig();
     updateUIForUser();
     await loadFromFirestore();
     setupTabs();
+    initPlayers();
   });
 </script>
 </body>
